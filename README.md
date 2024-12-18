@@ -12,7 +12,7 @@ If you want to host or create content for /vg/station14, this is the repo you ne
 
 ## Documentation/Wiki
 
-Our [wiki](http://ss13.moe/wiki/index.php?title=Main_Page) contains information specific to our server and codesbase, while the SS14 [docs site](https://docs.spacestation14.io/) has documentation on SS14s content, engine, game design, and resources for new contributors to the project.
+Our [wiki](http://ss13.moe/wiki/index.php?title=Main_Page) contains information specific to our server and codesbase, while the SS14 [docs site](https://docs.spacestation14.io/) has documentation on SS14's content, engine, game design, and resources for new contributors to the project.
 
 ## Building
 
