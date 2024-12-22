@@ -196,75 +196,10 @@ namespace Content.Shared.Atmos
         /// </summary>
         public const int AdjustedNumberOfGases = ((TotalNumberOfGases + 3) / 4) * 4;
 
-        /// <summary>
-        ///     Amount of heat released per mole of burnt hydrogen or tritium (hydrogen isotope)
-        /// </summary>
-        public const float FireHydrogenEnergyReleased = 284e3f; // hydrogen is 284 kJ/mol
         public const float FireMinimumTemperatureToExist = T0C + 100f;
         public const float FireMinimumTemperatureToSpread = T0C + 150f;
         public const float FireSpreadRadiosityScale = 0.85f;
-        public const float FirePlasmaEnergyReleased = 160e3f; // methane is 16 kJ/mol, plus plasma's spark of magic
         public const float FireGrowthRate = 40000f;
-
-        public const float SuperSaturationThreshold = 96f;
-        public const float SuperSaturationEnds = SuperSaturationThreshold / 3;
-
-        public const float OxygenBurnRateBase = 1.4f;
-        public const float PlasmaMinimumBurnTemperature = (100f+T0C);
-        public const float PlasmaUpperTemperature = (1370f+T0C);
-        public const float PlasmaOxygenFullburn = 10f;
-        public const float PlasmaBurnRateDelta = 9f;
-
-        /// <summary>
-        ///     This is calculated to help prevent singlecap bombs (Overpowered tritium/oxygen single tank bombs)
-        /// </summary>
-        public const float MinimumTritiumOxyburnEnergy = 143000f;
-
-        public const float TritiumBurnOxyFactor = 100f;
-        public const float TritiumBurnTritFactor = 10f;
-
-        public const float FrezonCoolLowerTemperature = 23.15f;
-
-        /// <summary>
-        ///     Frezon cools better at higher temperatures.
-        /// </summary>
-        public const float FrezonCoolMidTemperature = 373.15f;
-
-        public const float FrezonCoolMaximumEnergyModifier = 10f;
-
-        /// <summary>
-        ///     Remove X mol of nitrogen for each mol of frezon.
-        /// </summary>
-        public const float FrezonNitrogenCoolRatio = 5;
-        public const float FrezonCoolEnergyReleased = -600e3f;
-        public const float FrezonCoolRateModifier = 20f;
-
-        public const float FrezonProductionMaxEfficiencyTemperature = 73.15f;
-
-        /// <summary>
-        ///     1 mol of N2 is required per X mol of tritium and oxygen.
-        /// </summary>
-        public const float FrezonProductionNitrogenRatio = 10f;
-
-        /// <summary>
-        ///     1 mol of Tritium is required per X mol of oxygen.
-        /// </summary>
-        public const float FrezonProductionTritRatio = 8.0f;
-
-        /// <summary>
-        ///     1 / X of the tritium is converted into Frezon each tick
-        /// </summary>
-        public const float FrezonProductionConversionRate = 50f;
-
-        /// <summary>
-        ///     The maximum portion of the N2O that can decompose each reaction tick. (50%)
-        /// </summary>
-        public const float N2ODecompositionRate = 2f;
-
-        /// <summary>
-        ///     Divisor for Ammonia Oxygen reaction so that it doesn't happen instantaneously.
-        /// </summary>
-        public const float AmmoniaOxygenReactionRate = 10f;
 
         /// <summary>
         ///     Determines at what pressure the ultra-high pressure red icon is displayed.
