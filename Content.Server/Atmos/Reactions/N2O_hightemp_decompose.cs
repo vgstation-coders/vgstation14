@@ -16,7 +16,7 @@ namespace Content.Server.Atmos.Reactions
 			//source: http://vias.org/genchem/standard_enthalpies_table.html
 			const float energy_per_mole_decomposed = 81.55e3f; //81.55 kJ/mole. 
 			const float min_temp_to_decompose = Atmospherics.T0C+300f; //starts to decompose at 300C
-			const float decomposition_halfmark = 2925f; // at this many degrees more than the min, half will decompose in a cycle. (1250C total)
+			const float decomposition_halfmark = 1500f; // at this many degrees more than the min, half will decompose in a cycle. (1250C total)
 			//these numbers were eyeballed, honestly. finding a source for this is hard.
 			
 			float currenttemp=mixture.Temperature;
