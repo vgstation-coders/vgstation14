@@ -1457,6 +1457,7 @@
     brokenState: broken
     normalState: normal-unshaded
     denyState: deny-unshaded
+    denyDelay: 1.2
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/wallmed.rsi
     layers:
