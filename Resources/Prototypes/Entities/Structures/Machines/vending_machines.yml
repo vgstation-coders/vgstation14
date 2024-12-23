@@ -946,6 +946,7 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 2.0
   - type: Advertise
     pack: MegaSeedAds
   - type: SpeakOnUIClosed
