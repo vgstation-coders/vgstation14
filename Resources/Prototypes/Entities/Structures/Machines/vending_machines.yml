@@ -246,6 +246,8 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 3.4
+    denyDelay: 0.7
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/cart.rsi
     layers:
