@@ -154,7 +154,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 thermoMachine.TargetTemperature = MathF.Min(args.Temperature, thermoMachine.MaxTemperature);
             else
                 thermoMachine.TargetTemperature = MathF.Max(args.Temperature, thermoMachine.MinTemperature);
-            thermoMachine.TargetTemperature = MathF.Max(thermoMachine.TargetTemperature, 0.0f);
+            thermoMachine.TargetTemperature = MathF.Max(thermoMachine.TargetTemperature, Atmospherics.TCMB);
             _adminLogger.Add(LogType.AtmosTemperatureChanged, $"{ToPrettyString(args.Actor)} set temperature on {ToPrettyString(uid)} to {thermoMachine.TargetTemperature}");
             DirtyUI(uid, thermoMachine);
         }
