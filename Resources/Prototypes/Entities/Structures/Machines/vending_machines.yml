@@ -313,6 +313,7 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 2.9
   - type: Advertise
     pack: CigaretteMachineAds
   - type: SpeakOnUIClosed
