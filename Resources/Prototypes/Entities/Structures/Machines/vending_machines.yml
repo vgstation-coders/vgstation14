@@ -901,6 +901,8 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 2.7
+    denyDelay: 1.6
   - type: Advertise
     pack: SecTechAds
   - type: SpeakOnUIClosed
