@@ -870,6 +870,7 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 3.4
   - type: Advertise
     pack: NutriMaxAds
   - type: SpeakOnUIClosed
