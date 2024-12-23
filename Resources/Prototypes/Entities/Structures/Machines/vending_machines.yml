@@ -1607,6 +1607,7 @@
     brokenState: broken
     normalState: normal-unshaded
     denyState: deny-unshaded
+    denyDelay: 1.6
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/chapdrobe.rsi
     layers:
