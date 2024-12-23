@@ -17,6 +17,9 @@
       time: 36000 #10 hrs
     - !type:OverallPlaytimeRequirement
       time: 144000 #40 hrs
+    - !type:CharacterSpeciesRequirement
+      species:
+      - human # Human Supremacy /vg/station has no Xenos allowed in Command roles
   weight: 10
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
