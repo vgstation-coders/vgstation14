@@ -53,7 +53,7 @@ namespace Content.Client.Atmos.UI
                 actual = Math.Min(value, _maxTemp);
             else
                 actual = Math.Max(value, _minTemp);
-            actual = Math.Max(actual, Atmospherics.TCMB);
+            actual = Math.Max(actual, 0.0f);
             if (!MathHelper.CloseTo(actual, value, 0.09))
             {
                 _window?.SetTemperature(actual);
