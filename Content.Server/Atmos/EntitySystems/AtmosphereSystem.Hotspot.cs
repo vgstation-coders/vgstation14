@@ -23,6 +23,19 @@ namespace Content.Server.Atmos.EntitySystems
         [ViewVariables(VVAccess.ReadWrite)]
         public string? HotspotSound { get; private set; } = "/Audio/Effects/fire.ogg";
 
+		private const float min_moles_for_hotspot=.5f; //min moles of fuel+ox to allow combustion
+		
+		private float GetHotspotTotalFuel(TileAtmosphere tile){
+			if (tile==null || tile.Air==null) return 0f;
+			return tile.Air.GetMoles(Gas.Plasma)+tile.Air.GetMoles(Gas.Ammonia)+tile.Air.GetMoles(Gas.Tritium);
+		}
+		private float GetHotspotTotalOxidizer(TileAtmosphere tile){
+			if (tile==null || tile.Air==null) return 0f;
+			//nitro is .5 because of how it breaks down. (into 1 mole of n2, .5 mole of o2)
+			return tile.Air.GetMoles(Gas.Oxygen)+tile.Air.GetMoles(Gas.NitrousOxide)*.5f;
+		}
+		
+
         private void ProcessHotspot(
             Entity<GridAtmosphereComponent, GasTileOverlayComponent, MapGridComponent, TransformComponent> ent,
             TileAtmosphere tile)
@@ -46,9 +59,9 @@ namespace Content.Server.Atmos.EntitySystems
                 ExcitedGroupResetCooldowns(tile.ExcitedGroup);
 
             if ((tile.Hotspot.Temperature < Atmospherics.FireMinimumTemperatureToExist) || (tile.Hotspot.Volume <= 1f)
-                || tile.Air == null || tile.Air.GetMoles(Gas.Oxygen) < 0.5f || (tile.Air.GetMoles(Gas.Plasma) < 0.5f && tile.Air.GetMoles(Gas.Tritium) < 0.5f))
+                || tile.Air == null  || GetHotspotTotalFuel(tile)<min_moles_for_hotspot || GetHotspotTotalOxidizer(tile)<min_moles_for_hotspot )
             {
-                tile.Hotspot = new Hotspot();
+                tile.Hotspot = new Hotspot(); 
                 InvalidateVisuals(ent, tile);
                 return;
             }
@@ -121,25 +134,31 @@ namespace Content.Server.Atmos.EntitySystems
             // TODO ATMOS Maybe destroy location here?
         }
 
+		//this function is called by items which make a hotspot in order to register the hotspot
         private void HotspotExpose(GridAtmosphereComponent gridAtmosphere, TileAtmosphere tile,
             float exposedTemperature, float exposedVolume, bool soh = false, EntityUid? sparkSourceUid = null)
         {
+			const float min_moles_to_validate=.33f;
             if (tile.Air == null)
                 return;
 
-            var oxygen = tile.Air.GetMoles(Gas.Oxygen);
+          //  var oxygen = tile.Air.GetMoles(Gas.Oxygen);
 
-            if (oxygen < 0.5f)
-                return;
+            //if (oxygen < 0.5f)
+            //    return;
 
-            var plasma = tile.Air.GetMoles(Gas.Plasma);
-            var tritium = tile.Air.GetMoles(Gas.Tritium);
+            float plasma = tile.Air.GetMoles(Gas.Plasma);
+            float tritium = tile.Air.GetMoles(Gas.Tritium);
+            float oxygen = tile.Air.GetMoles(Gas.Oxygen);
+
+			//allow the hotspot if it would cause an ignition (oxy/n2o+assorted gasses). we allow n2o because it's an oxidizer, and thermal decomposition.
+			bool allowhotspotignite= GetHotspotTotalFuel(tile)>=min_moles_for_hotspot && GetHotspotTotalOxidizer(tile)>=min_moles_for_hotspot;
 
             if (tile.Hotspot.Valid)
             {
                 if (soh)
                 {
-                    if (plasma > 0.5f || tritium > 0.5f)
+                    if (allowhotspotignite)
                     {
                         if (tile.Hotspot.Temperature < exposedTemperature)
                             tile.Hotspot.Temperature = exposedTemperature;
@@ -151,7 +170,7 @@ namespace Content.Server.Atmos.EntitySystems
                 return;
             }
 
-            if ((exposedTemperature > Atmospherics.PlasmaMinimumBurnTemperature) && (plasma > 0.5f || tritium > 0.5f))
+            if ((exposedTemperature > Atmospherics.FireMinimumTemperatureToExist) && allowhotspotignite)
             {
                 if (sparkSourceUid.HasValue)
                     _adminLog.Add(LogType.Flammable, LogImpact.High, $"Heat/spark of {ToPrettyString(sparkSourceUid.Value)} caused atmos ignition of gas: {tile.Air.Temperature.ToString():temperature}K - {oxygen}mol Oxygen, {plasma}mol Plasma, {tritium}mol Tritium");
