@@ -6,6 +6,9 @@
   requirements:
     - !type:OverallPlaytimeRequirement
       time: 36000 #10 hrs
+    - !type:CharacterSpeciesRequirement
+      species:
+      - human # Human Supremacy /vg/station has no Xenos allowed in Command roles
   weight: 10
   startingGear: HoSGear
   icon: "JobIconHeadOfSecurity"

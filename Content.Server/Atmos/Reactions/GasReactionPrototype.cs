@@ -28,7 +28,7 @@ namespace Content.Server.Atmos.Reactions
         ///     Minimum temperature requirement.
         /// </summary>
         [DataField("minimumTemperature")]
-        public float MinimumTemperatureRequirement { get; private set; } = Atmospherics.TCMB;
+        public float MinimumTemperatureRequirement { get; private set; } = 0.0f;
 
         /// <summary>
         ///     Minimum energy requirement.

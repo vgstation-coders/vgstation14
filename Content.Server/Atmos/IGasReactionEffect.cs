@@ -16,5 +16,5 @@ namespace Content.Server.Atmos
         /// <param name="heatScale">Scaling factor that should be applied to all heat input or outputs.</param>
         ReactionResult React(GasMixture mixture, IGasMixtureHolder? holder, AtmosphereSystem atmosphereSystem,
             float heatScale);
-    }
+	}
 }
