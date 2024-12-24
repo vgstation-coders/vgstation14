@@ -543,7 +543,7 @@ public abstract partial class SharedMoverController : VirtualController
         EntityUid uid,
         EntityUid physicsUid,
         PhysicsComponent physicsComponent,
-        TransformComponent xform,
+        TransformComponent targetTransform,
         InputMoverComponent mover,
         ContentTileDefinition? tileDef,
         MovementRelayTargetComponent? relayTarget)
@@ -573,8 +573,8 @@ public abstract partial class SharedMoverController : VirtualController
             {
                 var parentRotation = GetParentGridAngle(mover);
                 var worldTotal = _relativeMovement ? parentRotation.RotateVec(total) : total;
-                var worldRot = _transform.GetWorldRotation(xform);
-                _transform.SetLocalRotation(xform, xform.LocalRotation + worldTotal.ToWorldAngle() - worldRot);
+                var worldRot = _transform.GetWorldRotation(targetTransform);
+                _transform.SetLocalRotation(targetTransform, targetTransform.LocalRotation + worldTotal.ToWorldAngle() - worldRot);
             }
             // Otherwise if we're moving, set rotation based how close we are to the destination tile as a LERP in
             // case origin and destination tiles have different rotations.
@@ -582,13 +582,13 @@ public abstract partial class SharedMoverController : VirtualController
             {
                 var delta = tileMovement.Destination - tileMovement.Origin.Position;
                 var worldRot = _transform.GetWorldRotation(rel).RotateVec(delta).ToWorldAngle();
-                _transform.SetWorldRotation(xform, worldRot);
+                _transform.SetWorldRotation(targetTransform, worldRot);
             }
         }
 
         // Play step sound.
         if (MobMoverQuery.TryGetComponent(uid, out var mobMover) &&
-            TryGetSound(false, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
+            TryGetSound(false, uid, mover, mobMover, targetTransform, out var sound, tileDef: tileDef))
         {
             var soundModifier = mover.Sprinting ? 3.5f : 1.5f;
             var audioParams = sound.Params
@@ -597,36 +597,40 @@ public abstract partial class SharedMoverController : VirtualController
             _audio.PlayPredicted(sound, uid, relayTarget?.Source ?? uid, audioParams);
         }
 
-        // Slide logic. If we're in the middle of a slide, check whether it should be ended
-        // (and immediately begin a new one if a move button is still being held down). Otherwise,
-        // continue slide. If no slide is active, begin a slide.
+
+        // If we're sliding...
         if (tileMovement.SlideActive)
         {
-            if (CheckForSlideEnd(mover.HeldMoveButtons, xform, tileMovement))
+            // Check whether we should end the slide. If we end it, also check for immediately starting a new slide.
+            if (CheckForSlideEnd(mover.HeldMoveButtons, targetTransform, tileMovement))
             {
                 EndSlide(tileMovement, uid, mover);
                 if (total != Vector2.Zero)
                 {
                     StartSlide(tileMovement, physicsUid, total, mover);
+                    UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
                 }
             }
-            // Otherwise continue the slide.
+            // Otherwise, continue slide.
             else
             {
                 UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
             }
         }
+        // If we're not sliding, start slide.
         else
         {
             StartSlide(tileMovement, physicsUid, total, mover);
+            UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
         }
+        tileMovement.LastTickPosition = targetTransform.LocalPosition;
         Dirty(uid, tileMovement);
         return true;
     }
 
     private bool CheckForSlideEnd(MoveButtons pressedButtons, TransformComponent transform, TileMovementComponent tileMovement)
     {
-        var reachedDestination = transform.LocalPosition.EqualsApprox(tileMovement.Destination, 0.01f);
+        var reachedDestination = transform.LocalPosition.EqualsApprox(tileMovement.Destination, 0.025f);
         var stoppedPressing = pressedButtons == MoveButtons.None && CurrentTime - tileMovement.MovementKeyInitialDownTime >= TimeSpan.FromSeconds(0.14f);
         return reachedDestination || stoppedPressing;
     }

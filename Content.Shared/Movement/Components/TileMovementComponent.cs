@@ -26,14 +26,21 @@ public sealed partial class TileMovementComponent : Component
     public TimeSpan? MovementKeyInitialDownTime;
 
     /// <summary>
-    /// Coordinates from which the current slide first began.
+    /// Local coordinates from which the current slide first began.
     /// </summary>
     [AutoNetworkedField]
     public EntityCoordinates Origin;
 
     /// <summary>
-    /// Coordinates of the target of the current slide local to the parent grid.
+    /// Local coordinates of the target of the current slide.
     /// </summary>
     [AutoNetworkedField]
     public Vector2 Destination;
+
+    /// <summary>
+    /// Local coordinates of the entity on the last tick. Used to determine whether progress is being made
+    /// in the move.
+    /// </summary>
+    [AutoNetworkedField]
+    public Vector2 LastTickPosition;
 }
