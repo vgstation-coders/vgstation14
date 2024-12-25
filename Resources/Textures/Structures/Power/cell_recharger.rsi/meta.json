@@ -31,20 +31,14 @@
             ]
         },
         {
-            "name": "light-charged",
-            "delays": [
-                [
-                    0.6,
-                    0.6
-                ]
-            ]
+            "name": "light-charged"
         },
         {
             "name": "light-empty",
             "delays": [
                 [
-                    0.8,
-                    0.8
+                    0.5,
+                    0.5
                 ]
             ]
         }

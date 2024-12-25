@@ -246,6 +246,8 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 3.4
+    denyDelay: 0.7
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/cart.rsi
     layers:
@@ -311,6 +313,7 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 2.9
   - type: Advertise
     pack: CigaretteMachineAds
   - type: SpeakOnUIClosed
@@ -828,7 +831,8 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
-    ejectDelay: 0.6
+    ejectDelay: 2.5
+    denyDelay: 1.4
   - type: Advertise
     pack: NanoMedAds
   - type: SpeakOnUIClosed
@@ -866,6 +870,7 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 3.4
   - type: Advertise
     pack: NutriMaxAds
   - type: SpeakOnUIClosed
@@ -900,6 +905,8 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 2.7
+    denyDelay: 1.6
   - type: Advertise
     pack: SecTechAds
   - type: SpeakOnUIClosed
@@ -939,6 +946,7 @@
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
+    ejectDelay: 2.0
   - type: Advertise
     pack: MegaSeedAds
   - type: SpeakOnUIClosed
@@ -1449,6 +1457,7 @@
     brokenState: broken
     normalState: normal-unshaded
     denyState: deny-unshaded
+    denyDelay: 1.2
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/wallmed.rsi
     layers:
@@ -1602,6 +1611,7 @@
     brokenState: broken
     normalState: normal-unshaded
     denyState: deny-unshaded
+    denyDelay: 1.6
   - type: Sprite
     sprite: Structures/Machines/VendingMachines/chapdrobe.rsi
     layers:

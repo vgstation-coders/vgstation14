@@ -9,91 +9,36 @@
   "states": [
     {
       "name": "grey",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     },{
         "name": "exit",
-        "directions": 4,
+        "directions": 1,
         "delays": [
-          [
             1
-          ],
-          [
-            1
-          ],
-          [
-            1
-          ],
-          [
-            1
-          ]
         ]
       },
     {
       "name": "caution",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     },
     {
       "name": "caution_security",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     },
     {
       "name": "janitor",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     }
   ]

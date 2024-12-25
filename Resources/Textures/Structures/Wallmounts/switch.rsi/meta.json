@@ -9,56 +9,23 @@
   "states": [
     {
       "name": "on",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     },
     {
       "name": "off",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     },
     {
       "name": "dead",
-      "directions": 4,
+      "directions": 1,
       "delays": [
-        [
           1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ],
-        [
-          1
-        ]
       ]
     }
   ]

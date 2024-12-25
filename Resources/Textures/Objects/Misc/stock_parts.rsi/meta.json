@@ -53,7 +53,9 @@
       "name": "bluespace_matter_bin",
       "delays": [
         [
-          0.3,
+          0.1,
+          0.1,
+          0.1,
           0.1,
           0.1,
           0.1
@@ -76,15 +78,7 @@
       ]
     },
     {
-      "name": "femto_mani",
-      "delays": [
-        [
-          0.3,
-          0.1,
-          0.1,
-          0.1
-        ]
-      ]
+      "name": "femto_mani"
     },
     {
       "name": "hdd1"
@@ -114,15 +108,7 @@
       "name": "pico_mani"
     },
     {
-      "name": "quadratic_capacitor",
-      "delays": [
-        [
-          0.3,
-          0.1,
-          0.1,
-          0.1
-        ]
-      ]
+      "name": "quadratic_capacitor"
     },
     {
       "name": "quadultra_micro_laser",
