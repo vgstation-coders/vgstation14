@@ -14,7 +14,7 @@ public sealed partial class HeatExchangerComponent : Component
     /// </summary>
 	[ViewVariables(VVAccess.ReadWrite)]
     [DataField("convection efficiency")]
-    public float convection_coeff { get; set; } = .1f;
+    public float convection_coeff { get; set; } = .5f;
 	
 	
 	/// <summary>
@@ -22,7 +22,7 @@ public sealed partial class HeatExchangerComponent : Component
     /// </summary>
 	[ViewVariables(VVAccess.ReadWrite)]
     [DataField("radiation area")]
-    public float surface_area { get; set; } = 10f;
+    public float surface_area { get; set; } = 3f;
 
 }
 

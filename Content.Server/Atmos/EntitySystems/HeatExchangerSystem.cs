@@ -63,7 +63,7 @@ public sealed class HeatExchangerSystem : EntitySystem
 			// math formula, where x is moles and v is volume: \left(1-\frac{1}{\frac{5x+v}{v}}\right)^{.75}  
 			//this is to simulate more moles making more heat transfer avalible.
 			//this has no basis in reality.
-			float env_convection_coef= 1f-(1f/((5f*environment.TotalMoles+environment.Volume)/environment.Volume));
+			float env_convection_coef= 1f-(1f/((500f*environment.TotalMoles+environment.Volume)/environment.Volume));
 			env_convection_coef=MathF.Pow(env_convection_coef,.75f);
 			
 			if(envT>pipeT){ // env -> pipe
@@ -90,7 +90,6 @@ public sealed class HeatExchangerSystem : EntitySystem
 		
 		//next up, simulate heat loss via radiation. we are assuming a perfect black body for this and also spherical cows.
 		//this uses the Stefan–Boltzmann law
-		const float surface_area=10f;
 		if(environment!=null){
 			float pipetemp=pipe.Air.Temperature;
 			float envtemp=environment.Temperature;
@@ -112,12 +111,12 @@ public sealed class HeatExchangerSystem : EntitySystem
 		}else{ //assume space cooling.
 			float pipetemp=pipe.Air.Temperature;
 			if (pipe.Air.Temperature<Atmospherics.TCMB){ // space -> pipe
-				float energy_radiated = Atmospherics.StefanBoltzmann*surface_area*(  MathF.Pow(Atmospherics.TCMB ,4f)-MathF.Pow(pipetemp ,4f)  );
+				float energy_radiated = Atmospherics.StefanBoltzmann*comp.surface_area*(  MathF.Pow(Atmospherics.TCMB ,4f)-MathF.Pow(pipetemp ,4f)  );
 				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(pipe.Air, true);
 				
 				if(heatcap_pipe>Atmospherics.MinimumHeatCapacity) pipe.Air.Temperature+=energy_radiated*dt/heatcap_pipe;
 			}else{ // pipe -> space
-				float energy_radiated = Atmospherics.StefanBoltzmann*surface_area*( MathF.Pow(pipetemp ,4f)- MathF.Pow(Atmospherics.TCMB ,4f)  );
+				float energy_radiated = Atmospherics.StefanBoltzmann*comp.surface_area*( MathF.Pow(pipetemp ,4f)- MathF.Pow(Atmospherics.TCMB ,4f)  );
 				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(pipe.Air, true);
 				
 				if(heatcap_pipe>Atmospherics.MinimumHeatCapacity) pipe.Air.Temperature-=energy_radiated*dt/heatcap_pipe;
