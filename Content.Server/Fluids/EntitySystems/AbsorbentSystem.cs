@@ -123,10 +123,13 @@ public sealed class AbsorbentSystem : SharedAbsorbentSystem
             return;
 
         var solution = absorberSoln.Value.Comp.Solution;
-        var spillAmount = component.PickupAmount > solution.Volume ? solution.Volume : component.PickupAmount;
+        // spill 20% of the mop contents down to 1u, then floor(1, remaining)
+        var spillAmount = solution.Volume > 5 ?
+            solution.Volume * 0.2
+            : solution.Volume > 1 ?
+                1
+                : solution.Volume;
 
-        // spilling the entire 50u mop in one go felt weird, cap to 10u
-        spillAmount = spillAmount > 10 ? 10 : spillAmount;
 
         if (spillAmount == FixedPoint2.Zero)
             return;
