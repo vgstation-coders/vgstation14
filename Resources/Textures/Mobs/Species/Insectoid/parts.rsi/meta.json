@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "full"
+    },
+    {
+      "name": "groin_f"
+    },
+    {
+      "name": "groin_m"
+    },
+    {
+      "name": "head_f"
+    },
+    {
+      "name": "head_m"
+    },
+    {
+      "name": "insectoid_eyes_m"
+    },
+    {
+      "name": "l_arm"
+    },
+    {
+      "name": "l_foot"
+    },
+    {
+      "name": "l_hand"
+    },
+    {
+      "name": "l_leg"
+    },
+    {
+      "name": "r_arm"
+    },
+    {
+      "name": "r_foot"
+    },
+    {
+      "name": "r_hand"
+    },
+    {
+      "name": "r_leg"
+    },
+    {
+      "name": "torso_f"
+    },
+    {
+      "name": "torso_m"
+    }
+  ]
+}

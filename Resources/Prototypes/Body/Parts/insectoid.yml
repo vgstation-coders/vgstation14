@@ -1,0 +1,120 @@
+# TODO: Add descriptions (many)
+# TODO BODY: Part damage
+- type: entity
+  id: PartInsectoid
+  parent: [BaseItem, BasePart]
+  name: "insectoid body part"
+  abstract: true
+  components:
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 3
+      - ReagentId: Blood
+        Quantity: 10
+
+- type: entity
+  id: TorsoInsectoid
+  name: "insectoid torso"
+  parent: [PartInsectoid, BaseTorso]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "torso_m"
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 10
+      - ReagentId: Blood
+        Quantity: 20
+
+
+- type: entity
+  id: HeadInsectoid
+  name: "insectoid head"
+  parent: [PartInsectoid, BaseHead]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "head_m"
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 5
+      - ReagentId: Blood
+        Quantity: 10
+
+- type: entity
+  id: LeftArmInsectoid
+  name: "left insectoid arm"
+  parent: [PartInsectoid, BaseLeftArm]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "l_arm"
+
+- type: entity
+  id: RightArmInsectoid
+  name: "right insectoid arm"
+  parent: [PartInsectoid, BaseRightArm]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "r_arm"
+
+- type: entity
+  id: LeftHandInsectoid
+  name: "left insectoid hand"
+  parent: [PartInsectoid, BaseLeftHand]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "l_hand"
+
+- type: entity
+  id: RightHandInsectoid
+  name: "right insectoid hand"
+  parent: [PartInsectoid, BaseRightHand]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "r_hand"
+
+- type: entity
+  id: LeftLegInsectoid
+  name: "left insectoid leg"
+  parent: [PartInsectoid, BaseLeftLeg]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "l_leg"
+
+- type: entity
+  id: RightLegInsectoid
+  name: "right insectoid leg"
+  parent: [PartInsectoid, BaseRightLeg]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "r_leg"
+
+- type: entity
+  id: LeftFootInsectoid
+  name: "left insectoid foot"
+  parent: [PartInsectoid, BaseLeftFoot]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "l_foot"
+
+- type: entity
+  id: RightFootInsectoid
+  name: "right insectoid foot"
+  parent: [PartInsectoid, BaseRightFoot]
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: "r_foot"

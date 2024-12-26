@@ -287,6 +287,19 @@
     Radiation: 0.0 # hehe funny cockroach immune to rads
     Caustic: 1.0
 
+- type: damageModifierSet
+  id: Insectoid
+  coefficients:
+    Blunt: 1.0
+    Slash: 1.0
+    Piercing: 1.0
+    Heat: 0.9 # Per /vg/13 bugs
+    Cold: 1.5 # My unasked for balance tweak
+    Poison: 0.5 # Per /vg/13 bugs
+    Cellular: 1.0
+    Radiation: 0.5 # Per /vg/13 bugs
+    Caustic: 1.0
+
 # Massive heat damage, presumably to kill with lasers
 - type: damageModifierSet
   id: LivingLight

@@ -1,0 +1,17 @@
+<Document>
+  # Insectoids
+
+  <Box>
+    <GuideEntityEmbed Entity="MobInsectoid" Caption=""/>
+  </Box>
+
+  Chittering creatures from another world, hired on the cheap by your favorite megacorp.
+
+  They can eat cotton, fabrics and clothing, and virtually any food that others would consider edible. They prefer a somewhat higher temperature range than humans.
+  Their Insect Blood can't be metabolised from Iron like normal blood.
+
+  Their wings give them better acceleration if there is no gravity on the station, but they still can't move without equipment when floating out in space.
+
+  They take [color=#1e90ff]50% more Cold damage[/color], [color=#ffa500]10% less Heat damage.[/color], and [color=#7da61a]50% less Poison and Radiation damage[/color]
+
+</Document>

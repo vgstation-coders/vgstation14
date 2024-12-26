@@ -1,0 +1,90 @@
+- type: entity
+  save: false
+  name: Urist McScree
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobInsectoid
+  abstract: true
+  components:
+  - type: HumanoidAppearance
+    species: Insectoid
+    hideLayersOnEquip: # Afaik I have all the bug special shit tied to HeadTop and Snout (mandibles) so this should work
+    - Snout
+    - HeadTop
+  - type: Hunger
+  - type: Thirst
+  - type: Icon
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: full
+  - type: Body
+    prototype: Insectoid
+    requiredLegs: 2
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: Insectoid
+  - type: ZombieAccentOverride
+    accent: zombieMoth # ToDo make a zombie bug accent
+  - type: Speech
+    speechVerb: Insectoid
+    allowedEmotes: ['Chitter']
+  - type: TypingIndicator
+    proto: moth # ToDo make a bug typing indicator
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeat
+      amount: 5
+  - type: Bloodstream
+    bloodReagent: InsectBlood # ToDo make bug specific blood, this is the Moth blood
+  - type: DamageVisuals
+    damageOverlayGroups:
+      Brute:
+        sprite: Mobs/Effects/brute_damage.rsi
+        color: "#808A51"
+      Burn:
+        sprite: Mobs/Effects/burn_damage.rsi
+  - type: MothAccent # ToDo make a bug accent
+  - type: Vocal
+    sounds:
+      Male: UnisexInsectoid
+      Female: UnisexInsectoid
+      Unsexed: UnisexInsectoid
+  - type: Temperature # Bugs hate the cold and thrive in the heat. BaseMob is 1 cold 1.5 heat
+    heatDamageThreshold: 350
+    coldDamageThreshold: 270
+    currentTemperature: 310.15
+    specificHeat: 46
+    coldDamage:
+      types:
+        Cold : 1.5 #per second, scales with temperature & other constants
+    heatDamage:
+      types:
+        Heat : 0.75 #per second, scales with temperature & other constants
+  - type: TemperatureSpeed
+    thresholds:
+      289: 0.8
+      275: 0.6
+      250: 0.4
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobInsectoidDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: Insectoid
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
