@@ -53,87 +53,85 @@ public sealed class HeatExchangerSystem : EntitySystem
 
         var dt = args.dt;
 
-        // Let n = moles(inlet) - moles(outlet), really a Δn
-        var P = inlet.Air.Pressure - outlet.Air.Pressure; // really a ΔP
-        // Such that positive P causes flow from the inlet to the outlet.
-
-        // We want moles transferred to be proportional to the pressure difference, i.e.
-        // dn/dt = G*P
-
-        // To solve this we need to write dn in terms of P. Since PV=nRT, dP/dn=RT/V.
-        // This assumes that the temperature change from transferring dn moles is negligible.
-        // Since we have P=Pi-Po, then dP/dn = dPi/dn-dPo/dn = R(Ti/Vi - To/Vo):
-        float dPdn = Atmospherics.R * (outlet.Air.Temperature / outlet.Air.Volume + inlet.Air.Temperature / inlet.Air.Volume);
-
-        // Multiplying both sides of the differential equation by dP/dn:
-        // dn/dt * dP/dn = dP/dt = G*P * (dP/dn)
-        // Which is a first-order linear differential equation with constant (heh...) coefficients:
-        // dP/dt + kP = 0, where k = -G*(dP/dn).
-        // This differential equation has a closed-form solution, namely:
-        float Pfinal = P * MathF.Exp(-comp.G * dPdn * dt);
-
-        // Finally, back out n, the moles transferred in this tick:
-        float n = (P - Pfinal) / dPdn;
-
-        GasMixture xfer;
-        if (n > 0)
-            xfer = inlet.Air.Remove(n);
-        else
-            xfer = outlet.Air.Remove(-n);
-
-        float CXfer = _atmosphereSystem.GetHeatCapacity(xfer, true);
-        if (CXfer < Atmospherics.MinimumHeatCapacity)
-            return;
-
-        var radTemp = Atmospherics.TCMB;
-
-        var environment = _atmosphereSystem.GetContainingMixture(uid, true, true);
-        bool hasEnv = false;
-        float CEnv = 0f;
-        if (environment != null)
-        {
-            CEnv = _atmosphereSystem.GetHeatCapacity(environment, true);
-            hasEnv = CEnv >= Atmospherics.MinimumHeatCapacity && environment.TotalMoles > 0f;
-            if (hasEnv)
-                radTemp = environment.Temperature;
-        }
-
-        // How ΔT' scales in respect to heat transferred
-        float TdivQ = 1f / CXfer;
-        // Since it's ΔT, also account for the environment's temperature change
-        if (hasEnv)
-            TdivQ += 1f / CEnv;
-
-        // Radiation
-        float dTR = xfer.Temperature - radTemp;
-        float dTRA = MathF.Abs(dTR);
-        float a0 = tileLoss / MathF.Pow(Atmospherics.T20C, 4);
-        // ΔT' = -kΔT^4, k = -ΔT'/ΔT^4
-        float kR = comp.alpha * a0 * TdivQ;
-        // Based on the fact that ((3t)^(-1/3))' = -(3t)^(-4/3) = -((3t)^(-1/3))^4, and ΔT' = -kΔT^4.
-        float dT2R = dTR * MathF.Pow((1f + 3f * kR * dt * dTRA * dTRA * dTRA), -1f/3f);
-        float dER = (dTR - dT2R) / TdivQ;
-        _atmosphereSystem.AddHeat(xfer, -dER);
-        if (hasEnv && environment != null)
-        {
-            _atmosphereSystem.AddHeat(environment, dER);
-
-            // Convection
-
-            // Positive dT is from pipe to surroundings
-            float dT = xfer.Temperature - environment.Temperature;
-            // ΔT' = -kΔT, k = -ΔT' / ΔT
-            float k = comp.K * TdivQ;
-            float dT2 = dT * MathF.Exp(-k * dt);
-            float dE = (dT - dT2) / TdivQ;
-            _atmosphereSystem.AddHeat(xfer, -dE);
-            _atmosphereSystem.AddHeat(environment, dE);
-        }
-
-        if (n > 0)
-            _atmosphereSystem.Merge(outlet.Air, xfer);
-        else
-            _atmosphereSystem.Merge(inlet.Air, xfer);
-
+		//i don't know why HEs have an in and an out, and you know what, i don't want to know - i'm sure it's due to some pipecode fuckery that will hurt my brain
+		//whatever. let's just mix them together and pretend that this isn't the case.
+		
+		_atmosphereSystem.Merge(outlet.Air, inlet.Air); //place inlet into outlet.
+		inlet.Air.Remove(inlet.Air.TotalMoles); //remove the inlet gasses
+		//we are going to hold off on splitting the gasses back into their sides, because it means we only have to do the math on 1 gas mix.
+		
+		
+		//first priority is to figure out convection.
+		const float convection_coeff=.1f;
+		var environment = _atmosphereSystem.GetContainingMixture(uid, true, true);
+		if(environment!=null){
+			float envT=environment.Temperature;
+			float pipeT=outlet.Air.Temperature;
+			
+			// 1- 1/(   (moles+volume)/volume  )
+			// math formula, where x is moles and v is volume: 1-\frac{1}{\frac{x+v}{v}}    
+			//this is to simulate more moles making more heat transfer avalible.
+			//this has no basis in reality.
+			float env_convection_coef= 1f-(1f/((environment.TotalMoles+environment.Volume)/environment.Volume));
+			if(envT>pipeT){ // env -> pipe
+				float EnergyToConvect= convection_coeff*env_convection_coef*(envT-pipeT);
+				float heatcap_env= _atmosphereSystem.GetHeatCapacity(environment, true);
+				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(outlet.Air, true);
+				
+				if(heatcap_env>Atmospherics.MinimumHeatCapacity && heatcap_pipe>Atmospherics.MinimumHeatCapacity){
+					outlet.Air.Temperature+= EnergyToConvect*dt/heatcap_pipe; //divide by heat capacity to get temp change
+					environment.Temperature-=EnergyToConvect*dt/heatcap_env;
+				}
+			}else{ // pipe->env
+				float EnergyToConvect= convection_coeff*env_convection_coef*(pipeT-envT);
+				float heatcap_env= _atmosphereSystem.GetHeatCapacity(environment, true);
+				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(outlet.Air, true);
+				
+				if(heatcap_env>Atmospherics.MinimumHeatCapacity && heatcap_pipe>Atmospherics.MinimumHeatCapacity){
+					outlet.Air.Temperature-= EnergyToConvect*dt/heatcap_pipe;
+					environment.Temperature+=EnergyToConvect*dt/heatcap_env;
+				}
+			}
+		}
+		
+		
+		//next up, simulate heat loss via radiation. we are assuming a perfect black body for this and also spherical cows.
+		//this uses the Stefan–Boltzmann law
+		const float surface_area=10f;
+		if(environment!=null){
+			float pipetemp=outlet.Air.Temperature;
+			float envtemp=environment.Temperature;
+			if (outlet.Air.Temperature<environment.Temperature){ // environment -> pipe
+				float energy_radiated = Atmospherics.StefanBoltzmann*surface_area*(  MathF.Pow(envtemp ,4f)-MathF.Pow(pipetemp ,4f)  );
+				float heatcap_env= _atmosphereSystem.GetHeatCapacity(environment, true);
+				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(outlet.Air, true);
+				
+				if(heatcap_env>Atmospherics.MinimumHeatCapacity) environment.Temperature-=energy_radiated*dt/heatcap_env;
+				if(heatcap_pipe>Atmospherics.MinimumHeatCapacity) outlet.Air.Temperature+=energy_radiated*dt/heatcap_pipe;
+			}else{ // pipe -> environment
+				float energy_radiated = Atmospherics.StefanBoltzmann*surface_area*(  MathF.Pow(pipetemp ,4f)-MathF.Pow(envtemp ,4f)  );
+				float heatcap_env= _atmosphereSystem.GetHeatCapacity(environment, true);
+				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(outlet.Air, true);
+				
+				if(heatcap_env>Atmospherics.MinimumHeatCapacity) environment.Temperature+=energy_radiated*dt/heatcap_env;
+				if(heatcap_pipe>Atmospherics.MinimumHeatCapacity) outlet.Air.Temperature-=energy_radiated*dt/heatcap_pipe;
+			}
+		}else{ //assume space cooling.
+			float pipetemp=outlet.Air.Temperature;
+			if (outlet.Air.Temperature<Atmospherics.TCMB){ // space -> pipe
+				float energy_radiated = Atmospherics.StefanBoltzmann*surface_area*(  MathF.Pow(Atmospherics.TCMB ,4f)-MathF.Pow(pipetemp ,4f)  );
+				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(outlet.Air, true);
+				
+				if(heatcap_pipe>Atmospherics.MinimumHeatCapacity) outlet.Air.Temperature+=energy_radiated*dt/heatcap_pipe;
+			}else{ // pipe -> space
+				float energy_radiated = Atmospherics.StefanBoltzmann*surface_area*( MathF.Pow(pipetemp ,4f)- MathF.Pow(Atmospherics.TCMB ,4f)  );
+				float heatcap_pipe= _atmosphereSystem.GetHeatCapacity(outlet.Air, true);
+				
+				if(heatcap_pipe>Atmospherics.MinimumHeatCapacity) outlet.Air.Temperature-=energy_radiated*dt/heatcap_pipe;
+			}
+		}
+		
+		//back to the fuckery that is inlets+outlets:
+		_atmosphereSystem.Merge(inlet.Air, outlet.Air.Remove(outlet.Air.TotalMoles/2.0f)); //move half of the outlet back to the inlet.
     }
 }
