@@ -3,34 +3,26 @@ namespace Content.Server.Atmos.Components;
 [RegisterComponent]
 public sealed partial class HeatExchangerComponent : Component
 {
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("inlet")]
-    public string InletName { get; set; } = "inlet";
 
     [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("outlet")]
-    public string OutletName { get; set; } = "outlet";
+    [DataField("pipe")]
+    public string PipeName { get; set; } = "pipe";
 
-    /// <summary>
-    /// Pipe conductivity (mols/kPa/sec).
+	
+	/// <summary>
+    /// Thermal convection multiplier. 0.0-1.0
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("conductivity")]
-    public float G { get; set; } = 1f;
-
-    /// <summary>
-    /// Thermal convection coefficient (J/degK/sec).
+	[ViewVariables(VVAccess.ReadWrite)]
+    [DataField("convection efficiency")]
+    public float convection_coeff { get; set; } = .1f;
+	
+	
+	/// <summary>
+    /// the simulated surface area for thermal radiation. >0.0
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("convectionCoefficient")]
-    public float K { get; set; } = 8000f;
+	[ViewVariables(VVAccess.ReadWrite)]
+    [DataField("radiation area")]
+    public float surface_area { get; set; } = 10f;
 
-    /// <summary>
-    /// Thermal radiation coefficient. Number of "effective" tiles this
-    /// radiator radiates compared to superconductivity tile losses.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField("radiationCoefficient")]
-    public float alpha { get; set; } = 140f;
 }
 

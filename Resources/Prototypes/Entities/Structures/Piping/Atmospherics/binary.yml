@@ -458,14 +458,10 @@
   - type: HeatExchanger
   - type: NodeContainer
     nodes:
-      inlet:
+      pipe:
         !type:PipeNode
         nodeGroupID: Pipe
-        pipeDirection: North
-      outlet:
-        !type:PipeNode
-        nodeGroupID: Pipe
-        pipeDirection: South
+        pipeDirection: Longitudinal
   - type: Construction
     graph: GasBinary
     node: radiator
