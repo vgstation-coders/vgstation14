@@ -59,11 +59,13 @@ public sealed class HeatExchangerSystem : EntitySystem
 			float envT=environment.Temperature;
 			float pipeT=pipe.Air.Temperature;
 			
-			// 1- 1/(   (moles+volume)/volume  )
-			// math formula, where x is moles and v is volume: 1-\frac{1}{\frac{x+v}{v}}    
+			// (1- 1/(   (5*moles+volume)/volume  ))^.75
+			// math formula, where x is moles and v is volume: \left(1-\frac{1}{\frac{5x+v}{v}}\right)^{.75}  
 			//this is to simulate more moles making more heat transfer avalible.
 			//this has no basis in reality.
-			float env_convection_coef= 1f-(1f/((environment.TotalMoles+environment.Volume)/environment.Volume));
+			float env_convection_coef= 1f-(1f/((5f*environment.TotalMoles+environment.Volume)/environment.Volume));
+			env_convection_coef=MathF.Pow(env_convection_coef,.75f);
+			
 			if(envT>pipeT){ // env -> pipe
 				float EnergyToConvect= comp.convection_coeff*env_convection_coef*(envT-pipeT);
 				float heatcap_env= _atmosphereSystem.GetHeatCapacity(environment, true);
