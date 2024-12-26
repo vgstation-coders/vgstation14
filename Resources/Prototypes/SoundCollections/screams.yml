@@ -10,11 +10,11 @@
 - type: soundCollection
   id: FemaleScreams
   files:
-    - /Audio/Voice/Human/femalescream_1.ogg
-    - /Audio/Voice/Human/femalescream_2.ogg
-    - /Audio/Voice/Human/femalescream_3.ogg
-    - /Audio/Voice/Human/femalescream_4.ogg
-    - /Audio/Voice/Human/femalescream_5.ogg
+    - /Audio/Voice/Human/femalescream1.ogg
+    - /Audio/Voice/Human/femalescream2.ogg
+    - /Audio/Voice/Human/femalescream3.ogg
+    - /Audio/Voice/Human/femalescream4.ogg
+    - /Audio/Voice/Human/femalescream5.ogg
 
 - type: soundCollection
   id: ZombieScreams
