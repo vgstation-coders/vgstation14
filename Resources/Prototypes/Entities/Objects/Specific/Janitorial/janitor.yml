@@ -22,7 +22,7 @@
       types:
         Blunt: 10
     soundHit:
-      collection: MetalThud
+      collection: Whip
   - type: Spillable
     solution: absorbed
   - type: Wieldable
