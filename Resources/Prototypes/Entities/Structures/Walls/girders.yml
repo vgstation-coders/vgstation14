@@ -20,6 +20,8 @@
         - MachineMask
         layer:
         - GlassAirlockLayer
+  - type: Anchorable
+    tool: Prying #/vg/13 girders disassemble with wrench but anchoring defaults wrench. We dislodge with crowbar
   - type: InteractionOutline
   - type: Construction
     graph: Girder
