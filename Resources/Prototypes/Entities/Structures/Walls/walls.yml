@@ -584,6 +584,9 @@
   name: RAISE AN ISSUE ON GITHUB IF YOU SEE THIS INGAME
   description: RAISE AN ISSUE ON GITHUB IF YOU SEE THIS INGAME
   components:
+  - type: Sprite
+    sprite: error.rsi
+    state: error
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: StructuralMetallicStrong
@@ -637,7 +640,7 @@
 - type: entity
   parent: WallReinforcedBase
   id: WallReinforcedS0
-  name: reinforced wall (no outer grille)
+  name: reinforced wall
   description: A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out. It has no outer grille.
   components:
   - type: Sprite
@@ -653,7 +656,7 @@
 - type: entity
   parent: WallReinforcedBase
   id: WallReinforcedS1
-  name: reinforced wall (no outer grille, external cover exposed)
+  name: reinforced wall
   description: A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out. It has no outer grille and the external reinforced cover is exposed.
   components:
   - type: Sprite
@@ -669,7 +672,7 @@
 - type: entity
   parent: WallReinforcedBase
   id: WallReinforcedS2
-  name: reinforced wall (no outer grille, external cover welded)
+  name: reinforced wall
   description: A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out. It has no outer grille and the external reinforced cover has been welded into.
   components:
   - type: Sprite
@@ -685,7 +688,7 @@
 - type: entity
   parent: WallReinforcedBase
   id: WallReinforcedS3
-  name: reinforced wall (no outer grille, external support rods exposed)
+  name: reinforced wall
   description: A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out. It has no outer grille or external reinforced cover and the external support rods are exposed.
   components:
   - type: Sprite
@@ -701,7 +704,7 @@
 - type: entity
   parent: WallReinforcedBase
   id: WallReinforcedS4
-  name: reinforced wall (no outer grille, external support rods loose)
+  name: reinforced wall
   description: A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out. It has no outer grille or external reinforced cover and the external support rods are loose.
   components:
   - type: Sprite
@@ -717,7 +720,7 @@
 - type: entity
   parent: WallReinforcedBase
   id: WallReinforcedS5
-  name: reinforced wall (no outer grille or externals, internal cover exposed)
+  name: reinforced wall
   description: A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out. It has no outer grille, external reinforced cover or external support rods and the inner reinforced cover is exposed.
   components:
   - type: Sprite

@@ -59,7 +59,6 @@
   id: DisplacedGirder
   parent: Girder
   name: displaced girder
-  description: That's a displaced girder. #straight from /vg/13
   components:
   - type: Sprite
     sprite: Structures/Walls/solid.rsi
