@@ -167,7 +167,7 @@ namespace Content.Client.Construction.UI
             PopulateInfo(_selected);
         }
 		
-		private int checkfuzzysearch(string hostfield,string searchtext){// return an int for futureproofing, if you wanted to sort by likeness, or something. doesn't matter much now, ints are compatible with boolean logic, anyways.
+		private int CheckFuzzySearch(string hostfield,string searchtext){// return an int for futureproofing, if you wanted to sort by likeness, or something. doesn't matter much now, ints are compatible with boolean logic, anyways.
 			int matchedtokens=0;
 			char[] str_seps={' ',':','.',',','/'}; //flatten punctuation.
 			string[] searchtokens = searchtext.Split(str_seps); //turn the search into tokens
@@ -180,9 +180,9 @@ namespace Content.Client.Construction.UI
 		}
 		
 		
-        private void OnViewPopulateRecipes(object? sender, (string search, string catagory, bool fuzzysearch) args)
+        private void OnViewPopulateRecipes(object? sender, (string search, string catagory, bool fuzzySearch) args)
         {
-            var (search, category,fuzzysearch) = args;
+            var (search, category,fuzzySearch) = args;
 
             var recipes = new List<ConstructionPrototype>();
 
@@ -205,7 +205,7 @@ namespace Content.Client.Construction.UI
 
                 if (!string.IsNullOrEmpty(search))
                 {
-                    if ( fuzzysearch? checkfuzzysearch( string.IsNullOrEmpty(recipe.FuzzyName) ? recipe.Name : recipe.FuzzyName,search)==0 :(!recipe.Name.ToLowerInvariant().Contains(search.Trim().ToLowerInvariant())))
+                    if ( fuzzySearch? CheckFuzzySearch( string.IsNullOrEmpty(recipe.FuzzyName) ? recipe.Name : recipe.FuzzyName,search)==0 :(!recipe.Name.ToLowerInvariant().Contains(search.Trim().ToLowerInvariant())))
                         continue;
                 }
 
