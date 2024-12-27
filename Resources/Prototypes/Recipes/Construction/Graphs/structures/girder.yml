@@ -23,9 +23,22 @@
               amount: 2
             - !type:DeleteEntity {}
           conditions:
-            - !type:EntityAnchored {}
+            - !type:EntityAnchored
+              anchored: true
           steps:
             - tool: Anchoring
+              doAfter: 4
+
+        - to: displacedGirder
+          completed:
+            - !type:SetAnchor
+              value: false
+            - !type:SnapToGrid
+              southRotation: false
+          conditions:
+            - !type:EntityAnchored {}
+          steps:
+            - tool: Prying
               doAfter: 4
 
         - to: wall
@@ -159,6 +172,19 @@
             - material: Steel
               amount: 2
               doAfter: 1
+
+    - node: displacedGirder
+      entity: DisplacedGirder
+      edges:
+        - to: girder
+          completed:
+            - !type:SnapToGrid
+              southRotation: true
+            - !type:SetAnchor
+              value: true
+          steps:
+            - tool: Anchoring
+              doAfter: 4
 
     - node: wall
       entity: WallSolid

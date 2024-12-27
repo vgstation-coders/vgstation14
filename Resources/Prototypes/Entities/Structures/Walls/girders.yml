@@ -1,6 +1,6 @@
 - type: entity
   id: Girder
-  parent: BaseStructureDynamic
+  parent: BaseStructure
   name: girder
   description: A large structural assembly made out of metal; It requires a layer of metal before it can be considered a wall.
   components:
@@ -20,9 +20,6 @@
         - MachineMask
         layer:
         - GlassAirlockLayer
-  - type: Anchorable
-    tool: Prying #/vg/13 girders disassemble with wrench but anchoring defaults wrench. We dislodge with crowbar
-    delay: 4
   - type: InteractionOutline
   - type: Construction
     graph: Girder
@@ -57,6 +54,21 @@
           collection: MetalBreak
   - type: StaticPrice
     price: 30
+
+- type: entity
+  id: DisplacedGirder
+  parent: Girder
+  name: displaced girder
+  description: That's a displaced girder. #straight from /vg/13
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/solid.rsi
+    state: wall_girder_displaced
+  - type: Construction
+    graph: Girder
+    node: girderDisplaced
+  - type: Physics
+    bodyType: Dynamic
 
 - type: entity
   id: ReinforcedGirder
