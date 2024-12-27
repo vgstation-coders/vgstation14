@@ -59,9 +59,9 @@
           conditions:
             - !type:EntityAnchored {}
           steps:
-            - material: Plasteel
+            - material: MetalRod
               amount: 2
-              doAfter: 1
+              doAfter: 5
 
         - to: woodWall
           completed:
@@ -324,7 +324,7 @@
     - node: reinforcedGirder
       entity: ReinforcedGirder
       edges:
-        - to: reinforcedWall
+        - to: reinforcedWallStage3
           completed:
             - !type:SnapToGrid
               southRotation: true
@@ -332,8 +332,8 @@
             - !type:EntityAnchored { }
           steps:
             - material: Plasteel
-              amount: 2
-              doAfter: 1
+              amount: 1
+              doAfter: 5
 
         - to: shuttleWall
           completed:
@@ -372,7 +372,7 @@
             - !type:SnapToGrid
               southRotation: true
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: MetalRod
               amount: 2
           conditions:
             - !type:EntityAnchored { }
@@ -383,54 +383,90 @@
     - node: reinforcedWall
       entity: WallReinforced
       edges:
-        - to: reinforcedGirder
+        - to: reinforcedWallStage0
+          steps:
+            - tool: Cutting
+
+    - node: reinforcedWallStage0
+      entity: WallReinforcedS0
+      edges:
+        - to: reinforcedWall
+          steps:
+            - tool: Welding
+              doAfter: 4
+        - to: reinforcedWallStage1
+          steps:
+            - tool: Screwing
+              doAfter: 4
+
+    - node: reinforcedWallStage1
+      entity: WallReinforcedS1
+      edges:
+        - to: reinforcedWallStage0
+          steps:
+            - tool: Screwing
+              doAfter: 4
+        - to: reinforcedWallStage2
+          steps:
+            - tool: Welding
+              doAfter: 4
+
+    - node: reinforcedWallStage2
+      entity: WallReinforcedS2
+      edges:
+        - to: reinforcedWallStage1
+          steps:
+            - tool: Welding
+              doAfter: 6
+        - to: reinforcedWallStage3
+          steps:
+            - tool: Prying
+              doAfter: 10
           completed:
             - !type:SpawnPrototype
               prototype: SheetPlasteel1
-              amount: 2
+              amount: 1
+
+    - node: reinforcedWallStage3
+      entity: WallReinforcedS3
+      edges:
+        - to: reinforcedWall
           steps:
-            - tool: Cutting
-              doAfter: 1
-              completed:
-                - !type:VisualizerDataInt
-                  key: "enum.ReinforcedWallVisuals.DeconstructionStage"
-                  data: 5
-            - tool: Screwing
-              doAfter: 1
-            - tool: Welding
-              doAfter: 5
-              completed:
-                - !type:VisualizerDataInt
-                  key: "enum.ReinforcedWallVisuals.DeconstructionStage"
-                  data: 4
-            - tool: Prying
-              doAfter: 1
-            - tool: Anchoring
-              doAfter: 1
-              completed:
-                - !type:VisualizerDataInt
-                  key: "enum.ReinforcedWallVisuals.DeconstructionStage"
-                  data: 3
+          - material: Plasteel
+            amount: 1
+            doAfter: 5
+        - to: reinforcedWallStage4
+          steps:
+          - tool: Anchoring
+            doAfter: 4
+
+    - node: reinforcedWallStage4
+      entity: WallReinforcedS4
+      edges:
+        - to: reinforcedWallStage3
+          steps:
+          - tool: Anchoring
+            doAfter: 4
+        - to: reinforcedWallStage5
+          steps:
+          - tool: Welding
+            doAfter: 10
+
+    - node: reinforcedWallStage5
+      entity: WallReinforcedS5
+      edges:
+        - to: reinforcedWallStage4
+          steps:
             - tool: Welding
               doAfter: 10
-              completed:
-                - !type:VisualizerDataInt
-                  key: "enum.ReinforcedWallVisuals.DeconstructionStage"
-                  data: 2
+        - to: reinforcedGirder
+          steps:
             - tool: Prying
-              doAfter: 1
-              completed:
-                - !type:VisualizerDataInt
-                  key: "enum.ReinforcedWallVisuals.DeconstructionStage"
-                  data: 1
-            - tool: Screwing
-              doAfter: 1
-              completed:
-                - !type:VisualizerDataInt
-                  key: "enum.ReinforcedWallVisuals.DeconstructionStage"
-                  data: 0
-            - tool: Cutting
-              doAfter: 1
+              doAfter: 10
+          completed:
+            - !type:SpawnPrototype
+              prototype: SheetPlasteel1
+              amount: 1
 
     - node: shuttleWall
       entity: WallShuttle

@@ -82,6 +82,7 @@
     - type: Construction
       graph: Girder
       node: reinforcedGirder
+    - type: Anchorable
     - type: Destructible
       thresholds:
         - trigger:
