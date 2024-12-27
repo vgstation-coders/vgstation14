@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "license": null,
-  "copyright": null,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprited by Buchse",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "crest_sharp"
+      "name": "insect_crest_sharp"
     },
     {
       "name": "insect_antennae"
