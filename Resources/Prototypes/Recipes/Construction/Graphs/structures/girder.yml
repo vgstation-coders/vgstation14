@@ -372,7 +372,7 @@
             - !type:SnapToGrid
               southRotation: true
             - !type:SpawnPrototype
-              prototype: MetalRod
+              prototype: PartRodMetal1
               amount: 2
           conditions:
             - !type:EntityAnchored { }
