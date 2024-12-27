@@ -27,3 +27,8 @@
   id: GlassSmash
   files:
   - /Audio/Effects/glass_smash.ogg
+
+- type: soundCollection
+  id: Whip
+  files:
+  - /Audio/Weapons/whip.ogg
