@@ -63,7 +63,7 @@ namespace Content.Shared.Atmos
             {
                 DebugTools.Assert(!float.IsNaN(value));
                 if (!Immutable)
-                    _temperature = MathF.Min(MathF.Max(value, Atmospherics.TCMB), Atmospherics.Tmax);
+                    _temperature = value;
             }
         }
 

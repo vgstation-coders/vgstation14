@@ -10,5 +10,5 @@ public sealed partial class IgnitionSourceComponent : Component
     public bool Ignited;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public int Temperature = 700;
+    public int Temperature = 973;
 }

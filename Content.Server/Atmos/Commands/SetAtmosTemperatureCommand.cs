@@ -27,7 +27,7 @@ namespace Content.Server.Atmos.Commands
                 return;
             }
 
-            if (temperature < Atmospherics.TCMB)
+            if (temperature < 0.0f)
             {
                 shell.WriteLine("Invalid temperature.");
                 return;
