@@ -13,6 +13,7 @@
         <BoxContainer Orientation="Vertical" HorizontalExpand="True">
             <BoxContainer Orientation="Horizontal">
                 <Button Name="MenuGridViewButton" ToggleMode="True" Text="{Loc construction-menu-grid-view}"/>
+                <Button Name="FuzzySearchButton" ToggleMode="True" Text="Fuzzy Search"/>
                 <Button Name="FavoriteButton" Visible="false"/>
             </BoxContainer>
             <Control>
