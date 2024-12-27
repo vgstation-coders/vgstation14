@@ -22,6 +22,7 @@
         - GlassAirlockLayer
   - type: Anchorable
     tool: Prying #/vg/13 girders disassemble with wrench but anchoring defaults wrench. We dislodge with crowbar
+    delay: 4
   - type: InteractionOutline
   - type: Construction
     graph: Girder
