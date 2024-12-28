@@ -35,7 +35,7 @@ namespace Content.Client.Construction.UI
         ScrollContainer RecipesGridScrollContainer { get; }
         GridContainer RecipesGrid { get; }
 
-        event EventHandler<(string search, string catagory)> PopulateRecipes;
+        event EventHandler<(string search, string catagory, bool fuzzysearch)> PopulateRecipes;
         event EventHandler<ItemList.Item?> RecipeSelected;
         event EventHandler RecipeFavorited;
         event EventHandler<bool> BuildButtonToggled;
@@ -82,11 +82,17 @@ namespace Content.Client.Construction.UI
             get => MenuGridViewButton.Pressed;
             set => MenuGridViewButton.Pressed = value;
         }
+		
+		public bool FuzzySearchEnabled
+		{
+			get => FuzzySearchButton.Pressed;
+            set => FuzzySearchButton.Pressed = value;
+		}
 
         public ConstructionMenu()
         {
-            SetSize = new Vector2(560, 450);
-            MinSize = new Vector2(560, 320);
+            SetSize = new Vector2(620, 450);
+            MinSize = new Vector2(620, 320);
 
             IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
@@ -98,12 +104,12 @@ namespace Content.Client.Construction.UI
             Recipes.OnItemDeselected += _ => RecipeSelected?.Invoke(this, null);
 
             SearchBar.OnTextChanged += _ =>
-                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[OptionCategories.SelectedId]));
+                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[OptionCategories.SelectedId], FuzzySearchEnabled));
             OptionCategories.OnItemSelected += obj =>
             {
                 OptionCategories.SelectId(obj.Id);
                 SearchBar.SetText(string.Empty);
-                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[obj.Id]));
+                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[obj.Id], FuzzySearchEnabled));
             };
 
             BuildButton.Text = Loc.GetString("construction-menu-place-ghost");
@@ -116,11 +122,15 @@ namespace Content.Client.Construction.UI
             FavoriteButton.OnPressed += args => RecipeFavorited?.Invoke(this, EventArgs.Empty);
 
             MenuGridViewButton.OnPressed += _ =>
-                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[OptionCategories.SelectedId]));
+                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[OptionCategories.SelectedId], FuzzySearchEnabled));
+				
+			FuzzySearchButton.OnPressed += _ =>
+                PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[OptionCategories.SelectedId], FuzzySearchEnabled));
+				
         }
 
         public event EventHandler? ClearAllGhosts;
-        public event EventHandler<(string search, string catagory)>? PopulateRecipes;
+        public event EventHandler<(string search, string catagory, bool fuzzysearch) >? PopulateRecipes;
         public event EventHandler<ItemList.Item?>? RecipeSelected;
         public event EventHandler? RecipeFavorited;
         public event EventHandler<bool>? BuildButtonToggled;
