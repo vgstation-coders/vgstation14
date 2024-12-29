@@ -1,5 +1,6 @@
 - type: construction
   name: clown hardsuit
+  fuzzyname: harsuit eva clown
   id: ClownHardsuit
   graph: ClownHardsuit
   startNode: start
@@ -11,6 +12,7 @@
 
 - type: construction
   name: mime hardsuit
+  fuzzyname: harsuit eva mime
   id: MimeHardsuit
   graph: MimeHardsuit
   startNode: start
@@ -77,6 +79,7 @@
 
 - type: construction
   name: medsec hud
+  fuzzyname: hud medical security medsec glasses
   id: ClothingEyesHudMedSec
   graph: HudMedSec
   startNode: start
@@ -99,6 +102,7 @@
 
 - type: construction
   name: security glasses
+  fuzzyname: security hud glasses
   id: ClothingEyesGlassesSecurity
   graph: GlassesSecHUD
   startNode: start
