@@ -1,5 +1,6 @@
 - type: construction
   name: torch
+  fuzzyname: torch light
   id: LightTorch
   graph: LightTorch
   startNode: start
@@ -11,6 +12,7 @@
 
 - type: construction
   name: logic gate
+  fuzzyname: logic gate signal
   id: LogicGate
   graph: LogicGate
   startNode: start
@@ -22,6 +24,7 @@
 
 - type: construction
   name: edge detector
+  fuzzyname: logic signal edge detector
   id: EdgeDetector
   graph: LogicGate
   startNode: start
@@ -33,6 +36,7 @@
 
 - type: construction
   name: power sensor
+  fuzzyname: signal power sensor
   id: PowerSensor
   graph: LogicGate
   startNode: start
@@ -44,6 +48,7 @@
 
 - type: construction
   name: memory cell
+  fuzzyname: logic signal memory cell
   id: MemoryCell
   graph: LogicGate
   startNode: start
