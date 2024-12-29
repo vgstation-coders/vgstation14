@@ -167,16 +167,16 @@ namespace Content.Client.Construction.UI
             PopulateInfo(_selected);
         }
 		
-		private int CheckFuzzySearch(string hostfield,string searchtext){// return an int for futureproofing, if you wanted to sort by likeness, or something. doesn't matter much now, ints are compatible with boolean logic, anyways.
+		private bool CheckFuzzySearch(string hostfield,string searchtext){
 			int matchedtokens=0;
-			char[] str_seps={' ',':','.',',','/'}; //flatten punctuation.
+			char[] str_seps={' ',':','.',',','/','-'}; //flatten punctuation.
 			string[] searchtokens = searchtext.Split(str_seps); //turn the search into tokens
 			
 			foreach (string stoken in searchtokens){
 				if(hostfield.Contains(stoken,StringComparison.OrdinalIgnoreCase)) matchedtokens++; //thanks chatGPT for helping me.
 			}
 			
-			return matchedtokens;
+			return matchedtokens==searchtokens.Length;
 		}
 		
 		
@@ -205,7 +205,7 @@ namespace Content.Client.Construction.UI
 
                 if (!string.IsNullOrEmpty(search))
                 {
-                    if ( fuzzySearch? CheckFuzzySearch( string.IsNullOrEmpty(recipe.FuzzyName) ? recipe.Name : recipe.FuzzyName,search)==0 :(!recipe.Name.ToLowerInvariant().Contains(search.Trim().ToLowerInvariant())))
+                    if ( fuzzySearch? !CheckFuzzySearch( string.IsNullOrEmpty(recipe.FuzzyName) ? recipe.Name : recipe.FuzzyName,search) :(!recipe.Name.ToLowerInvariant().Contains(search.Trim().ToLowerInvariant())))
                         continue;
                 }
 

@@ -1,5 +1,6 @@
 - type: construction
   name: girder
+  fuzzyname: girder wall
   id: Girder
   graph: Girder
   startNode: start
@@ -18,6 +19,7 @@
 
 - type: construction
   name: reinforced girder
+  fuzzyname: girder wall reinforced
   id: ReinforcedGirder
   graph: Girder
   startNode: start
@@ -54,6 +56,7 @@
 
 - type: construction
   name: wall
+  fuzzyname: wall metal
   id: Wall
   graph: Girder
   startNode: start
@@ -306,6 +309,7 @@
 
 - type: construction
   name: grille
+  fuzzyname: grille metal
   id: Grille
   graph: Grille
   startNode: start
@@ -342,6 +346,7 @@
 
 - type: construction
   name: diagonal grille
+  fuzzyname: grille diagonal metal
   id: GrilleDiagonal
   graph: GrilleDiagonal
   startNode: start
@@ -376,6 +381,7 @@
 
 - type: construction
   name: window
+  fuzzyname: glass window
   id: Window
   graph: Window
   startNode: start
@@ -395,6 +401,7 @@
 
 - type: construction
   name: diagonal window
+  fuzzyname: glass window diagonal
   id: WindowDiagonal
   graph: WindowDiagonal
   startNode: start
@@ -413,6 +420,7 @@
 
 - type: construction
   name: reinforced window
+  fuzzyname: glass window reinforced
   id: ReinforcedWindow
   graph: Window
   startNode: start
@@ -432,6 +440,7 @@
 
 - type: construction
   name: diagonal reinforced window
+  fuzzyname: glass window reinforced diagonal
   id: ReinforcedWindowDiagonal
   graph: WindowDiagonal
   startNode: start
@@ -450,6 +459,7 @@
 
 - type: construction
   name: tinted window
+  fuzzyname: glass window tinted
   id: TintedWindow
   graph: Window
   startNode: start
@@ -599,6 +609,7 @@
 
 - type: construction
   name: directional window
+  fuzzyname: glass directional window
   id: WindowDirectional
   graph: WindowDirectional
   startNode: start
@@ -617,6 +628,7 @@
 
 - type: construction
   name: directional reinforced window
+  fuzzyname: glass directional window reinforced
   id: WindowReinforcedDirectional
   graph: WindowDirectional
   startNode: start
@@ -763,6 +775,7 @@
 
 - type: construction
   name: firelock
+  fuzzyname: firelock atmospherics
   id: Firelock
   graph: Firelock
   startNode: start
@@ -781,6 +794,7 @@
 
 - type: construction
   name: glass firelock
+  fuzzyname: firelock atmospherics glass
   id: FirelockGlass
   graph: Firelock
   startNode: start
@@ -799,6 +813,7 @@
 
 - type: construction
   name: thin firelock
+  fuzzyname: firelock atmospherics thin
   id: FirelockEdge
   graph: Firelock
   startNode: start
@@ -1263,6 +1278,7 @@
 #Airlocks
 - type: construction
   name: airlock
+  fuzzyname: airlock door
   id: Airlock
   graph: Airlock
   startNode: start
@@ -1280,6 +1296,7 @@
 
 - type: construction
   name: glass airlock
+  fuzzyname: airlock door glass
   id: AirlockGlass
   graph: Airlock
   startNode: start
@@ -1297,6 +1314,7 @@
 
 - type: construction
   name: pinion airlock
+  fuzzyname: airlock door pinion
   id: PinionAirlock
   graph: PinionAirlock
   startNode: start
@@ -1314,6 +1332,7 @@
 
 - type: construction
   name: glass pinion airlock
+  fuzzyname: airlock door pinion glass
   id: PinionAirlockGlass
   graph: PinionAirlock
   startNode: start
@@ -1331,6 +1350,7 @@
 
 - type: construction
   name: shuttle airlock
+  fuzzyname: airlock door shuttle
   id: AirlockShuttle
   graph: AirlockShuttle
   startNode: start
@@ -1349,6 +1369,7 @@
 
 - type: construction
   name: glass shuttle airlock
+  fuzzyname: airlock door shuttle glass
   id: AirlockGlassShuttle
   graph: AirlockShuttle
   startNode: start
@@ -1367,6 +1388,7 @@
 
 - type: construction
   name: windoor
+  fuzzyname: door window windoor glass
   id: Windoor
   graph: Windoor
   startNode: start
@@ -1384,6 +1406,7 @@
 
 - type: construction
   name: secure windoor
+  fuzzyname: door window windoor glass secure locked
   id: SecureWindoor
   graph: Windoor
   startNode: start
@@ -1401,6 +1424,7 @@
 
 - type: construction
   name: clockwork windoor
+  fuzzyname: door window windoor clockwork
   id: ClockworkWindoor
   graph: Windoor
   startNode: start
