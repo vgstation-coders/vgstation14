@@ -1,5 +1,6 @@
 - type: construction
   name: grey bladed flatcap
+  fuzzyname: flatcap bladed grey
   id: BladedFlatcapGrey
   graph: BladedFlatcapGrey
   startNode: start
@@ -11,6 +12,7 @@
 
 - type: construction
   name: brown bladed flatcap
+  fuzzyname: flatcap bladed brown
   id: BladedFlatcapBrown
   graph: BladedFlatcapBrown
   startNode: start
@@ -22,6 +24,7 @@
 
 - type: construction
   name: glass shiv
+  fuzzyname: shiv glass
   id: Shiv
   graph: Shiv
   startNode: start
@@ -33,6 +36,7 @@
 
 - type: construction
   name: reinforced shiv
+  fuzzyname: shiv glass reinforced
   id: ReinforcedShiv
   graph: ReinforcedShiv
   startNode: start
@@ -44,6 +48,7 @@
 
 - type: construction
   name: plasma shiv
+  fuzzyname: shiv glass plasma
   id: PlasmaShiv
   graph: PlasmaShiv
   startNode: start
@@ -55,6 +60,7 @@
 
 - type: construction
   name: uranium shiv
+  fuzzyname: shiv uranium
   id: UraniumShiv
   graph: UraniumShiv
   startNode: start
@@ -66,6 +72,7 @@
 
 - type: construction
   name: crude spear
+  fuzzyname: crude spear
   id: Spear
   graph: Spear
   startNode: start
@@ -77,6 +84,7 @@
 
 - type: construction
   name: crude reinforced spear
+  fuzzyname: crude spear reinforced
   id: SpearReinforced
   graph: SpearReinforced
   startNode: start
@@ -88,6 +96,7 @@
 
 - type: construction
   name: crude plasma spear
+  fuzzyname: crude spear plasma
   id: SpearPlasma
   graph: SpearPlasma
   startNode: start
@@ -99,6 +108,7 @@
 
 - type: construction
   name: crude uranium spear
+  fuzzyname: crude spear uranium
   id: SpearUranium
   graph: SpearUranium
   startNode: start
@@ -110,6 +120,7 @@
 
 - type: construction
   name: makeshift bola
+  fuzzyname: bolas makeshift
   id: Bola
   graph: Bola
   startNode: start
@@ -121,6 +132,7 @@
 
 - type: construction
   name: wooden buckler
+  fuzzyname: buckler wooden
   id: WoodenBuckler
   graph: WoodenBuckler
   startNode: start
@@ -132,6 +144,7 @@
 
 - type: construction
   name: makeshift shield
+  fuzzyname: shield makeshift
   id: MakeshiftShield
   graph: MakeshiftShield
   startNode: start
@@ -143,6 +156,7 @@
 
 - type: construction
   name: glass shard arrow
+  fuzzyname: arrow glass shard
   id: ImprovisedArrow
   graph: ImprovisedArrow
   startNode: start
@@ -154,6 +168,7 @@
 
 - type: construction
   name: plasma glass shard arrow
+  fuzzyname: arrow plasma glass shard
   id: ImprovisedArrowPlasma
   graph: ImprovisedArrowPlasma
   startNode: start
@@ -165,6 +180,7 @@
 
 - type: construction
   name: uranium glass shard arrow
+  fuzzyname: arrow glass shard uranium
   id: ImprovisedArrowUranium
   graph: ImprovisedArrowUranium
   startNode: start
@@ -176,6 +192,7 @@
 
 - type: construction
   name: improvised bow
+  fuzzyname: bow improvised
   id: ImprovisedBow
   graph: ImprovisedBow
   startNode: start
@@ -187,6 +204,7 @@
 
 - type: construction
   name: bone spear
+  fuzzyname: speak bone silk
   id: SpearBone
   graph: SpearBone
   startNode: start
