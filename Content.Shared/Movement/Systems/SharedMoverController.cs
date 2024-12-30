@@ -204,8 +204,13 @@ public abstract partial class SharedMoverController : VirtualController
 
         if (!weightless && physicsComponent.BodyStatus == BodyStatus.OnGround)
         {
-            if (HandleTileMovement(uid, physicsUid, physicsComponent, xform, mover, tileDef, relayTarget))
+            if (HandleTileMovement(uid, physicsUid, physicsComponent, xform, mover, tileDef, relayTarget, frameTime))
                 return;
+        }
+        // If tile movement didn't return, we're pixel moving and thus we should reset tile movement.
+        if (TileMovementQuery.TryComp(physicsUid, out var tileMovement))
+        {
+            tileMovement.SlideActive = false;
         }
 
         // Regular movement.
@@ -529,15 +534,16 @@ public abstract partial class SharedMoverController : VirtualController
     }
 
     /// <summary>
-    /// Runs one tick of tile-based movement given the
+    /// Runs one tick of tile-based movement on the given inputs.
     /// </summary>
-    /// <param name="uid"></param>
-    /// <param name="physicsUid"></param>
+    /// <param name="uid">UID of the entity doing the move.</param>
+    /// <param name="physicsUid">UID of the physics entity doing the move. Usually the same as uid.</param>
     /// <param name="physicsComponent"></param>
-    /// <param name="xform"></param>
+    /// <param name="targetTransform"></param>
     /// <param name="mover"></param>
     /// <param name="tileDef"></param>
     /// <param name="relayTarget"></param>
+    /// <param name="frameTime"></param>
     /// <returns></returns>
     public bool HandleTileMovement(
         EntityUid uid,
@@ -546,18 +552,33 @@ public abstract partial class SharedMoverController : VirtualController
         TransformComponent targetTransform,
         InputMoverComponent mover,
         ContentTileDefinition? tileDef,
-        MovementRelayTargetComponent? relayTarget)
+        MovementRelayTargetComponent? relayTarget,
+        float frameTime)
     {
+
         if (!TileMovementQuery.TryComp(physicsUid, out var tileMovement))
             return false;
 
-        var moveDir = DirVecForButtons(mover.HeldMoveButtons);
-        var (walkDir, sprintDir) = mover.Sprinting ? (Vector2.Zero, moveDir) : (moveDir, Vector2.Zero);
-        var total = walkDir + sprintDir;
-
-        // If we're not moving, do nothing.
+        // If we're not moving, apply friction to current movement if possible and then stop.
         if (mover.HeldMoveButtons == MoveButtons.None && !tileMovement.SlideActive)
         {
+            var movementVelocity = physicsComponent.LinearVelocity;
+            var moveSpeedComponent = ModifierQuery.CompOrNull(uid);
+            float friction;
+
+            if (mover.HeldMoveButtons != MoveButtons.None || moveSpeedComponent?.FrictionNoInput == null)
+            {
+                friction = tileDef?.MobFriction ?? moveSpeedComponent?.Friction ?? MovementSpeedModifierComponent.DefaultFriction;
+            }
+            else
+            {
+                friction = tileDef?.MobFrictionNoInput ?? moveSpeedComponent.FrictionNoInput ?? MovementSpeedModifierComponent.DefaultFrictionNoInput;
+            }
+            var minimumFrictionSpeed = moveSpeedComponent?.MinimumFrictionSpeed ?? MovementSpeedModifierComponent.DefaultMinimumFrictionSpeed;
+            Friction(minimumFrictionSpeed, frameTime, friction, ref movementVelocity);
+
+            PhysicsSystem.SetLinearVelocity(physicsUid, movementVelocity, body: physicsComponent);
+            PhysicsSystem.SetAngularVelocity(physicsUid, 0, body: physicsComponent);
             return true;
         }
 
@@ -598,24 +619,24 @@ public abstract partial class SharedMoverController : VirtualController
         if (tileMovement.SlideActive)
         {
             var moveSpeedComponent = ModifierQuery.CompOrNull(uid);
-            float minMoveTime = 0;
+            float movementSpeed = 0;
             if (mover.Sprinting)
             {
-                minMoveTime = 1 / (moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed);
+                movementSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
             }
             else
             {
-                minMoveTime = 1 / (moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed);
+                movementSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             }
 
             // Check whether we should end the slide. If we end it, also check for immediately starting a new slide.
-            if (CheckForSlideEnd(mover.HeldMoveButtons, targetTransform, tileMovement, minMoveTime))
+            if (CheckForSlideEnd(mover.HeldMoveButtons, targetTransform, tileMovement, movementSpeed))
             {
                 EndSlide(tileMovement, uid, mover);
-                if (total != Vector2.Zero)
+                if (mover.HeldMoveButtons != MoveButtons.None)
                 {
-                    StartSlide(tileMovement, physicsUid, total, mover);
-                    UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
+                    StartSlide(tileMovement, physicsUid, mover);
+                    UpdateSlide(tileMovement, physicsUid, physicsUid, mover, tileDef, frameTime);
                 }
                 else
                 {
@@ -625,50 +646,74 @@ public abstract partial class SharedMoverController : VirtualController
             // Otherwise, continue slide.
             else
             {
-                UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
+                UpdateSlide(tileMovement, physicsUid, physicsUid, mover, tileDef, frameTime);
             }
         }
         // If we're not sliding, start slide.
         else
         {
-            StartSlide(tileMovement, physicsUid, total, mover);
-            UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
+            StartSlide(tileMovement, physicsUid, mover);
+            UpdateSlide(tileMovement, physicsUid, physicsUid, mover, tileDef, frameTime);
         }
         tileMovement.LastTickPosition = targetTransform.LocalPosition;
         Dirty(uid, tileMovement);
         return true;
     }
 
-    private bool CheckForSlideEnd(MoveButtons pressedButtons, TransformComponent transform, TileMovementComponent tileMovement, float minPressedTime)
+    private bool CheckForSlideEnd(MoveButtons pressedButtons, TransformComponent transform, TileMovementComponent tileMovement, float movementSpeed)
     {
-        var reachedDestination = transform.LocalPosition.EqualsApprox(tileMovement.Destination, 0.03f);
+        var minPressedTime = (1.05f / movementSpeed);
+        // We need to stop the move once we are close enough. This isn't perfect, since it technically ends the move
+        // 1 tick early in some cases. This is because there's a fundamental issue where because this is a physics-based
+        // tile movement system, we sometimes find scenarios where on each tick of the physics system, the player is moved
+        // back and forth across the destination in a loop. Thus, the tolerance needs to be set high, which as mentioned
+        // can lead to 1-tick early move ends.
+        float destinationTolerance = movementSpeed / 100f;
+
+        var reachedDestination = transform.LocalPosition.EqualsApprox(tileMovement.Destination, destinationTolerance);
         var stoppedPressing = pressedButtons != tileMovement.CurrentSlideMoveButtons && CurrentTime - tileMovement.MovementKeyInitialDownTime >= TimeSpan.FromSeconds(minPressedTime);
         return reachedDestination || stoppedPressing;
     }
 
-    private void StartSlide(TileMovement.TileMovementComponent tileMovement, EntityUid uid, Vector2 total, InputMoverComponent mover)
+    private void StartSlide(TileMovement.TileMovementComponent tileMovement, EntityUid uid, InputMoverComponent mover)
     {
+
         var localPosition = Transform(uid).LocalPosition;
-        var dir = Angle.FromWorldVec(total).GetDir();
-        var offset = dir.ToIntVec();
+        var offset = DirVecForButtons(mover.HeldMoveButtons);
+        offset = mover.RelativeRotation.RotateVec(offset);
 
         tileMovement.SlideActive = true;
         tileMovement.Origin = new EntityCoordinates(uid, localPosition);
-        tileMovement.Destination = localPosition + offset;
+        tileMovement.Destination = SnapCoordinatesToTile(localPosition + offset);
         tileMovement.MovementKeyInitialDownTime = CurrentTime;
         tileMovement.CurrentSlideMoveButtons = mover.HeldMoveButtons;
     }
 
-    private void UpdateSlide(TileMovement.TileMovementComponent tileMovement, EntityUid uid, EntityUid physicsUid, InputMoverComponent mover)
+    /// <summary>
+    /// Updates the velocity of the current physics-based tile movement slide on the given entity.
+    /// </summary>
+    /// <param name="tileMovement">TileMovementComponent on the entity that's being moved.</param>
+    /// <param name="uid">UID of the entity being moved.</param>
+    /// <param name="physicsUid">UID of the entity with the physics body being moved. Usually the same as uid.</param>
+    /// <param name="mover">InputMoverComponent of the person controlling the move.</param>
+    /// <param name="tileDef">Definition of the current tile, used for friction calculations.</param>
+    /// <param name="frameTime">Time in seconds since the last physics tick.</param>
+    private void UpdateSlide(TileMovement.TileMovementComponent tileMovement, EntityUid uid, EntityUid physicsUid, InputMoverComponent mover, ContentTileDefinition? tileDef, float frameTime)
     {
         var targetTransform = Transform(uid);
 
         if (PhysicsQuery.TryComp(physicsUid, out var physicsComponent))
         {
-            var parentRotation = GetParentGridAngle(mover);
+            // Gather some components and values.
+            var parentRotation = Angle.Zero;
+            if (XformQuery.TryGetComponent(mover.RelativeEntity, out var relativeTransform))
+            {
+                parentRotation = _transform.GetWorldRotation(relativeTransform);
+            }
             var movementVelocity = (tileMovement.Destination) - (targetTransform.LocalPosition);
             var moveSpeedComponent = ModifierQuery.CompOrNull(uid);
 
+            // Determine velocity based on movespeed, and rotate it so that it's in the right direction.
             movementVelocity.Normalize();
             if (mover.Sprinting)
             {
@@ -678,8 +723,23 @@ public abstract partial class SharedMoverController : VirtualController
             {
                 movementVelocity *= moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             }
-
             movementVelocity = parentRotation.RotateVec(movementVelocity);
+
+            // Possibility: friction here? Not necessarily needed because we're not currently performing acceleration
+            // like in normal pixel movement.
+            /*float friction;
+            if (mover.HeldMoveButtons != MoveButtons.None || moveSpeedComponent?.FrictionNoInput == null)
+            {
+                friction = tileDef?.MobFriction ?? moveSpeedComponent?.Friction ?? MovementSpeedModifierComponent.DefaultFriction;
+            }
+            else
+            {
+                friction = tileDef?.MobFrictionNoInput ?? moveSpeedComponent.FrictionNoInput ?? MovementSpeedModifierComponent.DefaultFrictionNoInput;
+            }
+            var minimumFrictionSpeed = moveSpeedComponent?.MinimumFrictionSpeed ?? MovementSpeedModifierComponent.DefaultMinimumFrictionSpeed;
+            Friction(minimumFrictionSpeed, frameTime, friction, ref movementVelocity);*/
+
+            // Apply final velocity to physics body.
             PhysicsSystem.SetLinearVelocity(physicsUid, movementVelocity, body: physicsComponent);
             PhysicsSystem.SetAngularVelocity(physicsUid, 0, body: physicsComponent);
         }
@@ -693,6 +753,7 @@ public abstract partial class SharedMoverController : VirtualController
         PhysicsSystem.SetLinearVelocity(uid, Vector2.Zero, body: physicsComponent);
         PhysicsSystem.SetAngularVelocity(uid, 0, body: physicsComponent);
     }
+
 
     /// <summary>
     /// Returns the given local coordinates snapped to the center of the tile it is currently on.
