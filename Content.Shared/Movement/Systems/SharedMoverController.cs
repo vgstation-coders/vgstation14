@@ -551,16 +551,12 @@ public abstract partial class SharedMoverController : VirtualController
         if (!TileMovementQuery.TryComp(physicsUid, out var tileMovement))
             return false;
 
-        var immediateDir = DirVecForButtons(mover.HeldMoveButtons);
-        var (walkDir, sprintDir) = mover.Sprinting ? (Vector2.Zero, immediateDir) : (immediateDir, Vector2.Zero);
-        var moveSpeedComponent = ModifierQuery.CompOrNull(uid);
-        var walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
-        var sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
-        var total = walkDir * walkSpeed + sprintDir * sprintSpeed;
-
+        var moveDir = DirVecForButtons(mover.HeldMoveButtons);
+        var (walkDir, sprintDir) = mover.Sprinting ? (Vector2.Zero, moveDir) : (moveDir, Vector2.Zero);
+        var total = walkDir + sprintDir;
 
         // If we're not moving, do nothing.
-        if (total == Vector2.Zero && !tileMovement.SlideActive)
+        if (mover.HeldMoveButtons == MoveButtons.None && !tileMovement.SlideActive)
         {
             return true;
         }
@@ -568,17 +564,17 @@ public abstract partial class SharedMoverController : VirtualController
         // Set rotation:
         if (!NoRotateQuery.HasComponent(uid))
         {
-            // If we're standing still, sync rotation with parent grid.
+            /*// If we're standing still, sync rotation with parent grid.
             if (!tileMovement.SlideActive)
             {
                 var parentRotation = GetParentGridAngle(mover);
                 var worldTotal = _relativeMovement ? parentRotation.RotateVec(total) : total;
                 var worldRot = _transform.GetWorldRotation(targetTransform);
                 _transform.SetLocalRotation(targetTransform, targetTransform.LocalRotation + worldTotal.ToWorldAngle() - worldRot);
-            }
+            }*/
             // Otherwise if we're moving, set rotation based how close we are to the destination tile as a LERP in
             // case origin and destination tiles have different rotations.
-            else if (TryComp(mover.RelativeEntity, out TransformComponent? rel))
+            if (tileMovement.SlideActive && TryComp(mover.RelativeEntity, out TransformComponent? rel))
             {
                 var delta = tileMovement.Destination - tileMovement.Origin.Position;
                 var worldRot = _transform.GetWorldRotation(rel).RotateVec(delta).ToWorldAngle();
@@ -601,14 +597,29 @@ public abstract partial class SharedMoverController : VirtualController
         // If we're sliding...
         if (tileMovement.SlideActive)
         {
+            var moveSpeedComponent = ModifierQuery.CompOrNull(uid);
+            float minMoveTime = 0;
+            if (mover.Sprinting)
+            {
+                minMoveTime = 1 / (moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed);
+            }
+            else
+            {
+                minMoveTime = 1 / (moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed);
+            }
+
             // Check whether we should end the slide. If we end it, also check for immediately starting a new slide.
-            if (CheckForSlideEnd(mover.HeldMoveButtons, targetTransform, tileMovement))
+            if (CheckForSlideEnd(mover.HeldMoveButtons, targetTransform, tileMovement, minMoveTime))
             {
                 EndSlide(tileMovement, uid, mover);
                 if (total != Vector2.Zero)
                 {
                     StartSlide(tileMovement, physicsUid, total, mover);
                     UpdateSlide(tileMovement, physicsUid, physicsUid, mover);
+                }
+                else
+                {
+                    ForceSnapToTile(uid, mover);
                 }
             }
             // Otherwise, continue slide.
@@ -628,10 +639,10 @@ public abstract partial class SharedMoverController : VirtualController
         return true;
     }
 
-    private bool CheckForSlideEnd(MoveButtons pressedButtons, TransformComponent transform, TileMovementComponent tileMovement)
+    private bool CheckForSlideEnd(MoveButtons pressedButtons, TransformComponent transform, TileMovementComponent tileMovement, float minPressedTime)
     {
-        var reachedDestination = transform.LocalPosition.EqualsApprox(tileMovement.Destination, 0.025f);
-        var stoppedPressing = pressedButtons == MoveButtons.None && CurrentTime - tileMovement.MovementKeyInitialDownTime >= TimeSpan.FromSeconds(0.14f);
+        var reachedDestination = transform.LocalPosition.EqualsApprox(tileMovement.Destination, 0.03f);
+        var stoppedPressing = pressedButtons != tileMovement.CurrentSlideMoveButtons && CurrentTime - tileMovement.MovementKeyInitialDownTime >= TimeSpan.FromSeconds(minPressedTime);
         return reachedDestination || stoppedPressing;
     }
 
@@ -641,10 +652,11 @@ public abstract partial class SharedMoverController : VirtualController
         var dir = Angle.FromWorldVec(total).GetDir();
         var offset = dir.ToIntVec();
 
+        tileMovement.SlideActive = true;
         tileMovement.Origin = new EntityCoordinates(uid, localPosition);
         tileMovement.Destination = localPosition + offset;
         tileMovement.MovementKeyInitialDownTime = CurrentTime;
-        tileMovement.SlideActive = true;
+        tileMovement.CurrentSlideMoveButtons = mover.HeldMoveButtons;
     }
 
     private void UpdateSlide(TileMovement.TileMovementComponent tileMovement, EntityUid uid, EntityUid physicsUid, InputMoverComponent mover)
@@ -655,9 +667,19 @@ public abstract partial class SharedMoverController : VirtualController
         {
             var parentRotation = GetParentGridAngle(mover);
             var movementVelocity = (tileMovement.Destination) - (targetTransform.LocalPosition);
+            var moveSpeedComponent = ModifierQuery.CompOrNull(uid);
+
             movementVelocity.Normalize();
-            movementVelocity *= 8.5f;
-            movementVelocity =  parentRotation.RotateVec(movementVelocity);
+            if (mover.Sprinting)
+            {
+                movementVelocity *= moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
+            }
+            else
+            {
+                movementVelocity *= moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
+            }
+
+            movementVelocity = parentRotation.RotateVec(movementVelocity);
             PhysicsSystem.SetLinearVelocity(physicsUid, movementVelocity, body: physicsComponent);
             PhysicsSystem.SetAngularVelocity(physicsUid, 0, body: physicsComponent);
         }
@@ -670,8 +692,16 @@ public abstract partial class SharedMoverController : VirtualController
         var physicsComponent = PhysicsQuery.GetComponent(uid);
         PhysicsSystem.SetLinearVelocity(uid, Vector2.Zero, body: physicsComponent);
         PhysicsSystem.SetAngularVelocity(uid, 0, body: physicsComponent);
+    }
 
-        ForceSnapToTile(uid, mover);
+    /// <summary>
+    /// Returns the given local coordinates snapped to the center of the tile it is currently on.
+    /// </summary>
+    /// <param name="input">Given coordinates to snap.</param>
+    /// <returns>The closest tile center to the input.<returns>
+    private Vector2 SnapCoordinatesToTile(Vector2 input)
+    {
+        return new Vector2((int)Math.Floor(input.X) + 0.5f, (int)Math.Floor(input.Y) + 0.5f);
     }
 
     /// <summary>
@@ -698,9 +728,7 @@ public abstract partial class SharedMoverController : VirtualController
     private EntityCoordinates ForceSnapToTile(Entity<TransformComponent> entity, Entity<TransformComponent> grid)
     {
         var localCoordinates = entity.Comp.Coordinates.WithEntityId(grid.Owner, _transform, EntityManager);
-        var tileX = (int)Math.Floor(localCoordinates.Position.X) + 0.5f;
-        var tileY = (int)Math.Floor(localCoordinates.Position.Y) + 0.5f;
-        var tileCoords = new EntityCoordinates(localCoordinates.EntityId, tileX, tileY);
+        var tileCoords = new EntityCoordinates(localCoordinates.EntityId, SnapCoordinatesToTile(localCoordinates.Position));
 
         if (!localCoordinates.Position.EqualsApprox(tileCoords.Position))
         {

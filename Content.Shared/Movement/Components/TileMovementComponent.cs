@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Content.Shared.Movement.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
@@ -18,14 +19,6 @@ public sealed partial class TileMovementComponent : Component
     public bool SlideActive;
 
     /// <summary>
-    /// This helps determine how long a slide should last. A slide will continue so long
-    /// as a movement key (WASD) is being held down, but if it was held down for less than
-    /// a certain time period then it will continue for a minimum period.
-    /// </summary>
-    [AutoNetworkedField]
-    public TimeSpan? MovementKeyInitialDownTime;
-
-    /// <summary>
     /// Local coordinates from which the current slide first began.
     /// </summary>
     [AutoNetworkedField]
@@ -36,6 +29,20 @@ public sealed partial class TileMovementComponent : Component
     /// </summary>
     [AutoNetworkedField]
     public Vector2 Destination;
+
+    /// <summary>
+    /// This helps determine how long a slide should last. A slide will continue so long
+    /// as a movement key (WASD) is being held down, but if it was held down for less than
+    /// a certain time period then it will continue for a minimum period.
+    /// </summary>
+    [AutoNetworkedField]
+    public TimeSpan? MovementKeyInitialDownTime;
+
+    /// <summary>
+    /// Move buttons used to initiate the current slide.
+    /// </summary>
+    [AutoNetworkedField]
+    public MoveButtons CurrentSlideMoveButtons;
 
     /// <summary>
     /// Local coordinates of the entity on the last tick. Used to determine whether progress is being made
