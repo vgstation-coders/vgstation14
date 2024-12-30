@@ -8,6 +8,7 @@
   - type: Rotatable
   - type: Sprite
     sprite: Structures/smalldispensers.rsi
+    snapCardinals: true
     drawdepth: SmallObjects
     state: booze
   - type: ReagentDispenser

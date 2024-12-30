@@ -114,7 +114,7 @@ namespace Content.Client.Construction.UI
             _constructionView.RecipeFavorited += (_, _) => OnViewFavoriteRecipe();
 
             PopulateCategories();
-            OnViewPopulateRecipes(_constructionView, (string.Empty, string.Empty));
+            OnViewPopulateRecipes(_constructionView, (string.Empty, string.Empty,false));
         }
 
         public void OnHudCraftingButtonToggled(ButtonToggledEventArgs args)
@@ -166,10 +166,23 @@ namespace Content.Client.Construction.UI
             if (_placementManager.IsActive && !_placementManager.Eraser) UpdateGhostPlacement();
             PopulateInfo(_selected);
         }
-
-        private void OnViewPopulateRecipes(object? sender, (string search, string catagory) args)
+		
+		private bool CheckFuzzySearch(string hostfield,string searchtext){
+			int matchedtokens=0;
+			char[] str_seps={' ',':','.',',','/','-'}; //flatten punctuation.
+			string[] searchtokens = searchtext.Split(str_seps); //turn the search into tokens
+			
+			foreach (string stoken in searchtokens){
+				if(hostfield.Contains(stoken,StringComparison.OrdinalIgnoreCase)) matchedtokens++; //thanks chatGPT for helping me.
+			}
+			
+			return matchedtokens==searchtokens.Length;
+		}
+		
+		
+        private void OnViewPopulateRecipes(object? sender, (string search, string catagory, bool fuzzySearch) args)
         {
-            var (search, category) = args;
+            var (search, category,fuzzySearch) = args;
 
             var recipes = new List<ConstructionPrototype>();
 
@@ -192,7 +205,7 @@ namespace Content.Client.Construction.UI
 
                 if (!string.IsNullOrEmpty(search))
                 {
-                    if (!recipe.Name.ToLowerInvariant().Contains(search.Trim().ToLowerInvariant()))
+                    if ( fuzzySearch? !CheckFuzzySearch( string.IsNullOrEmpty(recipe.FuzzyName) ? recipe.Name : recipe.FuzzyName,search) :(!recipe.Name.ToLowerInvariant().Contains(search.Trim().ToLowerInvariant())))
                         continue;
                 }
 
@@ -458,9 +471,9 @@ namespace Content.Client.Construction.UI
             if (_selectedCategory == _favoriteCatName)
             {
                 if (_favoritedRecipes.Count > 0)
-                    OnViewPopulateRecipes(_constructionView, (string.Empty, _favoriteCatName));
+                    OnViewPopulateRecipes(_constructionView, (string.Empty, _favoriteCatName,false));
                 else
-                    OnViewPopulateRecipes(_constructionView, (string.Empty, string.Empty));
+                    OnViewPopulateRecipes(_constructionView, (string.Empty, string.Empty,false));
             }
 
             PopulateInfo(_selected);

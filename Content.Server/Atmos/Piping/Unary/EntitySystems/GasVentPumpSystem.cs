@@ -51,12 +51,9 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             SubscribeLocalEvent<GasVentPumpComponent, PowerChangedEvent>(OnPowerChanged);
             SubscribeLocalEvent<GasVentPumpComponent, DeviceNetworkPacketEvent>(OnPacketRecv);
             SubscribeLocalEvent<GasVentPumpComponent, ComponentInit>(OnInit);
-            SubscribeLocalEvent<GasVentPumpComponent, ExaminedEvent>(OnExamine);
             SubscribeLocalEvent<GasVentPumpComponent, SignalReceivedEvent>(OnSignalReceived);
             SubscribeLocalEvent<GasVentPumpComponent, GasAnalyzerScanEvent>(OnAnalyzed);
             SubscribeLocalEvent<GasVentPumpComponent, WeldableChangedEvent>(OnWeldChanged);
-            SubscribeLocalEvent<GasVentPumpComponent, InteractUsingEvent>(OnInteractUsing);
-            SubscribeLocalEvent<GasVentPumpComponent, VentScrewedDoAfterEvent>(OnVentScrewed);
         }
 
         private void OnGasVentPumpUpdated(EntityUid uid, GasVentPumpComponent vent, ref AtmosDeviceUpdateEvent args)
@@ -86,21 +83,9 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             {
                 return;
             }
-            // If the lockout has expired, disable it.
-            if (vent.IsPressureLockoutManuallyDisabled && _timing.CurTime >= vent.ManualLockoutReenabledAt)
-            {
-                vent.IsPressureLockoutManuallyDisabled = false;
-            }
 
             var timeDelta = args.dt;
             var pressureDelta = timeDelta * vent.TargetPressureChange;
-
-            var lockout = (environment.Pressure < vent.UnderPressureLockoutThreshold) && !vent.IsPressureLockoutManuallyDisabled;
-            if (vent.UnderPressureLockout != lockout) // update visuals only if this changes
-            {
-                vent.UnderPressureLockout = lockout;
-                UpdateState(uid, vent);
-            }
 
             if (vent.PumpDirection == VentPumpDirection.Releasing && pipe.Air.Pressure > 0)
             {
@@ -124,16 +109,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 // how many moles to transfer to change external pressure by pressureDelta
                 // (ignoring temperature differences because I am lazy)
                 var transferMoles = pressureDelta * environment.Volume / (pipe.Air.Temperature * Atmospherics.R);
-
-                // Only run if the device is under lockout and not being overriden
-                if (vent.UnderPressureLockout & !vent.PressureLockoutOverride & !vent.IsPressureLockoutManuallyDisabled)
-                {
-                    // Leak only a small amount of gas as a proportion of supply pipe pressure.
-                    var pipeDelta = pipe.Air.Pressure - environment.Pressure;
-                    transferMoles = (float)timeDelta * pipeDelta * vent.UnderPressureLockoutLeaking;
-                    if (transferMoles < 0.0)
-                        return;
-                }
 
                 // limit transferMoles so the source doesn't go below its bound.
                 if ((vent.PressureChecks & VentPressureBound.InternalBound) != 0)
@@ -284,27 +259,11 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
             }
             else if (vent.PumpDirection == VentPumpDirection.Releasing)
             {
-                if (vent.UnderPressureLockout & !vent.PressureLockoutOverride & !vent.IsPressureLockoutManuallyDisabled)
-                    _appearance.SetData(uid, VentPumpVisuals.State, VentPumpState.Lockout, appearance);
-                else
-                    _appearance.SetData(uid, VentPumpVisuals.State, VentPumpState.Out, appearance);
+                _appearance.SetData(uid, VentPumpVisuals.State, VentPumpState.Out, appearance);
             }
             else if (vent.PumpDirection == VentPumpDirection.Siphoning)
             {
                 _appearance.SetData(uid, VentPumpVisuals.State, VentPumpState.In, appearance);
-            }
-        }
-
-        private void OnExamine(EntityUid uid, GasVentPumpComponent component, ExaminedEvent args)
-        {
-            if (!TryComp<GasVentPumpComponent>(uid, out var pumpComponent))
-                return;
-            if (args.IsInDetailsRange)
-            {
-                if (pumpComponent.PumpDirection == VentPumpDirection.Releasing & pumpComponent.UnderPressureLockout & !pumpComponent.PressureLockoutOverride & !pumpComponent.IsPressureLockoutManuallyDisabled)
-                {
-                    args.PushMarkup(Loc.GetString("gas-vent-pump-uvlo"));
-                }
             }
         }
 
@@ -336,25 +295,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
         {
             UpdateState(uid, component);
         }
-        private void OnInteractUsing(EntityUid uid, GasVentPumpComponent component, InteractUsingEvent args)
-        {
-            if (args.Handled
-             || component.UnderPressureLockout == false
-             || !_toolSystem.HasQuality(args.Used, "Screwing")
-             || !Transform(uid).Anchored
-            )
-            {
-                return;
-            }
 
-            args.Handled = true;
-
-            _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, component.ManualLockoutDisableDoAfter, new VentScrewedDoAfterEvent(), uid, uid, args.Used));
-        }
-        private void OnVentScrewed(EntityUid uid, GasVentPumpComponent component, VentScrewedDoAfterEvent args)
-        {
-            component.ManualLockoutReenabledAt = _timing.CurTime + component.ManualLockoutDisabledDuration;
-            component.IsPressureLockoutManuallyDisabled = true;
-        }
     }
 }

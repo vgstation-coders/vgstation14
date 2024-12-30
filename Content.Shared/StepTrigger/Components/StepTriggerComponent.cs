@@ -37,7 +37,7 @@ public sealed partial class StepTriggerComponent : Component
     ///     Entities will only be triggered if their speed exceeds this limit.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float RequiredTriggeredSpeed = 3.5f;
+    public float RequiredTriggeredSpeed = 5.0f;
 
     /// <summary>
     ///     If any entities occupy the blacklist on the same tile then steptrigger won't work.

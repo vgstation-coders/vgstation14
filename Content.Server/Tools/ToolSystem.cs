@@ -20,7 +20,8 @@ public sealed class ToolSystem : SharedToolSystem
         if (xform.GridUid is { } gridUid)
         {
             var position = _transformSystem.GetGridOrMapTilePosition(entity.Owner, xform);
-            _atmosphereSystem.HotspotExpose(gridUid, position, 700, 50, entity.Owner, true);
+			//700C
+            _atmosphereSystem.HotspotExpose(gridUid, position, 973.15f, 50, entity.Owner, true);
         }
     }
 

@@ -10,6 +10,7 @@ using Content.Shared.Timing;
 using Content.Shared.Weapons.Melee;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -95,11 +96,51 @@ public sealed class AbsorbentSystem : SharedAbsorbentSystem
 
     private void OnAfterInteract(EntityUid uid, AbsorbentComponent component, AfterInteractEvent args)
     {
-        if (!args.CanReach || args.Handled || args.Target == null)
+        if (!args.CanReach || args.Handled)
             return;
 
-        Mop(args.User, args.Target.Value, args.Used, component);
+        if (args.Target == null)
+        {
+            SpillMop(args.User, args.ClickLocation, args.Used, component);
+        }
+        else
+        {
+            Mop(args.User, args.Target.Value, args.Used, component);
+        }
+
         args.Handled = true;
+    }
+
+    public void SpillMop(EntityUid user, EntityCoordinates clickLocation, EntityUid used, AbsorbentComponent component)
+    {
+        if (!_solutionContainerSystem.TryGetSolution(used, AbsorbentComponent.SolutionName, out var absorberSoln))
+        {
+            return;
+        }
+
+        if (TryComp<UseDelayComponent>(used, out var useDelay)
+            && _useDelay.IsDelayed((used, useDelay)))
+            return;
+
+        var solution = absorberSoln.Value.Comp.Solution;
+        // spill 20% of the mop contents down to 1u, then floor(1, remaining)
+        var spillAmount = solution.Volume > 5 ?
+            solution.Volume * 0.2
+            : solution.Volume > 1 ?
+                1
+                : solution.Volume;
+
+
+        if (spillAmount == FixedPoint2.Zero)
+            return;
+
+        var spill = _solutionContainerSystem.SplitSolution(absorberSoln.Value, spillAmount);
+
+        if (!_puddleSystem.TrySpillAt(clickLocation, spill, out _))
+        {
+            // failed to create puddle, put the solution back in the absorber
+            _solutionContainerSystem.TryAddSolution(absorberSoln.Value, spill);
+        }
     }
 
     public void Mop(EntityUid user, EntityUid target, EntityUid used, AbsorbentComponent component)

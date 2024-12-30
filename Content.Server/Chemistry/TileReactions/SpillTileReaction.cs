@@ -18,7 +18,7 @@ namespace Content.Server.Chemistry.TileReactions
     public sealed partial class SpillTileReaction : ITileReaction
     {
         [DataField("launchForwardsMultiplier")] private float _launchForwardsMultiplier = 1;
-        [DataField("requiredSlipSpeed")] private float _requiredSlipSpeed = 6;
+        [DataField("requiredSlipSpeed")] private float _requiredSlipSpeed = 9;
         [DataField("paralyzeTime")] private float _paralyzeTime = 1;
 
         /// <summary>
