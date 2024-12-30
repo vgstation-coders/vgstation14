@@ -585,8 +585,11 @@
   description: RAISE AN ISSUE ON GITHUB IF YOU SEE THIS INGAME
   components:
   - type: Sprite
-    sprite: error.rsi
-    state: error
+    sprite: Structures/Walls/debug.rsi
+    #state: full
+  - type: Icon
+    sprite: Structures/Walls/debug.rsi
+    #state: full
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: StructuralMetallicStrong
