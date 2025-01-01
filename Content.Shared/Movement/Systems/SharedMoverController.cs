@@ -807,36 +807,6 @@ public abstract partial class SharedMoverController : VirtualController
         }
     }
 
-    /*
-    /// <summary>
-    /// Instantly snaps/teleports an entity to the center of the tile it is currently standing on based on the
-    /// given grid. Does not trigger collisions.
-    /// </summary>
-    /// <param name="uid">UID of entity to be snapped.</param>
-    /// <param name="inputMover">InputMoverComponent on the entity to be snapped.</param>
-    private void ForceSnapToTile(EntityUid uid, InputMoverComponent inputMover)
-    {
-        if (HasComp<TransformComponent>(inputMover.RelativeEntity))
-        {
-            var targetTransform = Transform(uid);
-
-            var localCoordinates = targetTransform.Coordinates.Position;
-            var snappedCoordinates = new EntityCoordinates(inputMover.RelativeEntity.Value, SnapCoordinatesToTile(localCoordinates));
-
-            if (!localCoordinates.EqualsApprox(snappedCoordinates.Position))
-            {
-                if (targetTransform.ParentUid.IsValid())
-                {
-                    var local2 = snappedCoordinates.WithEntityId(targetTransform.ParentUid, _transform, EntityManager).Position;
-                    _transform.SetLocalPosition(uid, local2, targetTransform);
-                }
-            }
-
-            PhysicsSystem.WakeBody(uid);
-        }
-    }
-    */
-
     /// <summary>
     /// Instantly snaps/teleports an entity to the center of the tile it is currently standing on based on the
     /// given grid. Does not trigger collisions.

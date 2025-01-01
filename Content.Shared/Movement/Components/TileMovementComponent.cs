@@ -45,8 +45,7 @@ public sealed partial class TileMovementComponent : Component
     public MoveButtons CurrentSlideMoveButtons;
 
     /// <summary>
-    /// Local coordinates of the entity on the last physics tick. Used to determine whether progress is being made
-    /// in the move.
+    /// Local coordinates of the entity on the last physics tick.
     /// </summary>
     [AutoNetworkedField]
     public Vector2 LastTickPosition;
