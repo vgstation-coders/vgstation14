@@ -23,5 +23,41 @@
   background: /Textures/LobbyScreens/skellyvstherev.webp
 
 - type: lobbyBackground
+  id: title_contest3
+  background: /Textures/LobbyScreens/title_contest3.png
+
+- type: lobbyBackground
+  id: title_contest4
+  background: /Textures/LobbyScreens/title_contest4.png
+
+- type: lobbyBackground
+  id: title_contest7
+  background: /Textures/LobbyScreens/title_contest7.png
+
+- type: lobbyBackground
+  id: title_contest9
+  background: /Textures/LobbyScreens/title_contest9.png
+
+- type: lobbyBackground
+  id: title11
+  background: /Textures/LobbyScreens/title11.png
+
+- type: lobbyBackground
+  id: title13
+  background: /Textures/LobbyScreens/title13.png
+
+- type: lobbyBackground
+  id: title19
+  background: /Textures/LobbyScreens/title19.png
+
+- type: lobbyBackground
+  id: title21
+  background: /Textures/LobbyScreens/title21.png
+
+- type: lobbyBackground
+  id: title23
+  background: /Textures/LobbyScreens/title23.png
+
+- type: lobbyBackground
   id: Warden
   background: /Textures/LobbyScreens/warden.webp
