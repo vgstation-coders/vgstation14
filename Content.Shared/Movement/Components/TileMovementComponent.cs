@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Content.Shared.Movement.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
@@ -18,6 +19,18 @@ public sealed partial class TileMovementComponent : Component
     public bool SlideActive;
 
     /// <summary>
+    /// Local coordinates from which the current slide first began.
+    /// </summary>
+    [AutoNetworkedField]
+    public EntityCoordinates Origin;
+
+    /// <summary>
+    /// Local coordinates of the target of the current slide.
+    /// </summary>
+    [AutoNetworkedField]
+    public Vector2 Destination;
+
+    /// <summary>
     /// This helps determine how long a slide should last. A slide will continue so long
     /// as a movement key (WASD) is being held down, but if it was held down for less than
     /// a certain time period then it will continue for a minimum period.
@@ -26,14 +39,20 @@ public sealed partial class TileMovementComponent : Component
     public TimeSpan? MovementKeyInitialDownTime;
 
     /// <summary>
-    /// Coordinates from which the current slide first began.
+    /// Move buttons used to initiate the current slide.
     /// </summary>
     [AutoNetworkedField]
-    public EntityCoordinates Origin;
+    public MoveButtons CurrentSlideMoveButtons;
 
     /// <summary>
-    /// Coordinates of the target of the current slide local to the parent grid.
+    /// Local coordinates of the entity on the last physics tick.
     /// </summary>
     [AutoNetworkedField]
-    public Vector2 Destination;
+    public Vector2 LastTickPosition;
+
+    /// <summary>
+    /// Whether this entity was weightless last physics tick.
+    /// </summary>
+    [AutoNetworkedField]
+    public bool WasWeightlessLastTick;
 }
