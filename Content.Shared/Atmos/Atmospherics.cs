@@ -14,6 +14,11 @@ namespace Content.Shared.Atmos
         /// </summary>
         public const float R = 8.314462618f;
 
+		/// <summary>
+		/// 	Relates energy radiated to temperature. W*m^-2*K^-4
+		/// </summary>
+		public const float StefanBoltzmann = 5.670374419e-8f;
+
         /// <summary>
         ///     1 ATM in kPA.
         /// </summary>
