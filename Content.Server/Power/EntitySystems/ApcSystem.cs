@@ -156,10 +156,11 @@ public sealed class ApcSystem : EntitySystem
             return;
 
         var battery = netBat.NetworkBattery;
-        const int ChargeAccuracy = 5;
+        //const int ChargeAccuracy = 5;
 
         // TODO: Fix ContentHelpers or make a new one coz this is cooked.
-        var charge = ContentHelpers.RoundToNearestLevels(battery.CurrentStorage / battery.Capacity, 1.0, 100 / ChargeAccuracy) / 100f * ChargeAccuracy;
+        //var charge = ContentHelpers.RoundToNearestLevels(battery.CurrentStorage / battery.Capacity, 1.0, 100 / ChargeAccuracy) / 100f * ChargeAccuracy;
+		float charge = battery.CurrentStorage / battery.Capacity;
 
         var state = new ApcBoundInterfaceState(apc.MainBreakerEnabled,
             (int) MathF.Ceiling(battery.CurrentSupply), apc.LastExternalState,
