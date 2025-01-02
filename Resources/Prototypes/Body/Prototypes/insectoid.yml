@@ -1,0 +1,49 @@
+﻿- type: body
+  id: Insectoid
+  name: "insectoid"
+  root: torso
+  slots:
+    head:
+      part: HeadInsectoid
+      connections:
+      - torso
+      organs:
+        brain: OrganHumanBrain
+        eyes: OrganHumanEyes # ToDo night vision for bugs
+    torso:
+      part: TorsoInsectoid
+      organs:
+        heart: OrganAnimalHeart
+        lungs: OrganHumanLungs
+        stomach: OrganInsectoidStomach
+        liver: OrganAnimalLiver
+        kidneys: OrganHumanKidneys
+      connections:
+      - right arm
+      - left arm
+      - right leg
+      - left leg
+    right arm:
+      part: RightArmInsectoid
+      connections:
+      - right hand
+    left arm:
+      part: LeftArmInsectoid
+      connections:
+      - left hand
+    right hand:
+      part: RightHandInsectoid
+    left hand:
+      part: LeftHandInsectoid
+    right leg:
+      part: RightLegInsectoid
+      connections:
+      - right foot
+    left leg:
+      part: LeftLegInsectoid
+      connections:
+      - left foot
+    right foot:
+      part: RightFootInsectoid
+    left foot:
+      part: LeftFootInsectoid
