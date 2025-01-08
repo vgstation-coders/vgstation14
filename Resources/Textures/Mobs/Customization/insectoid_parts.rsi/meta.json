@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprited by Buchse",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "insect_crest_sharp"
+    },
+    {
+      "name": "insect_antennae"
+    },
+    {
+      "name": "insect_antennae_long"
+    },
+    {
+      "name": "insect_crest_short"
+    },
+    {
+      "name": "insect_curly"
+    },
+    {
+      "name": "insect_hiver"
+    },
+    {
+      "name": "insect_hornet"
+    },
+    {
+      "name": "insect_mandibles"
+    },
+    {
+      "name": "insect_nasute"
+    },
+    {
+      "name": "insect_quad"
+    },
+    {
+      "name": "insect_ridge"
+    },
+    {
+      "name": "insect_shiny"
+    },
+    {
+      "name": "insect_soldier"
+    },
+    {
+      "name": "insect_swept"
+    },
+    {
+      "name": "insect_thick"
+    },
+    {
+      "name": "insect_triple"
+    },
+    {
+      "name": "insect_wedge"
+    },
+    {
+      "name": "insect_wide"
+    }
+  ]
+}

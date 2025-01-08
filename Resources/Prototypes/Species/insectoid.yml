@@ -1,0 +1,154 @@
+- type: species
+  id: Insectoid
+  name: species-name-insectoid
+  roundStart: true
+  prototype: MobInsectoid
+  sprites: MobInsectoidSprites
+  defaultSkinTone: "#ffda93"
+  markingLimits: MobInsectoidMarkingLimits
+  dollPrototype: MobInsectoidDummy
+  skinColoration: Hues
+  maleFirstNames: names_insectoid
+  femaleFirstNames: names_insectoid
+  naming: First
+
+- type: speciesBaseSprites
+  id: MobInsectoidSprites
+  sprites:
+    Head: MobInsectoidHead
+    Snout: MobHumanoidAnyMarking
+    Chest: MobInsectoidTorso
+    HeadTop: MobHumanoidAnyMarking
+    Eyes: MobInsectoidEyes
+    LArm: MobInsectoidLArm
+    RArm: MobInsectoidRArm
+    LHand: MobInsectoidLHand
+    RHand: MobInsectoidRHand
+    LLeg: MobInsectoidLLeg
+    RLeg: MobInsectoidRLeg
+    LFoot: MobInsectoidLFoot
+    RFoot: MobInsectoidRFoot
+
+- type: humanoidBaseSprite
+  id: MobInsectoidEyes
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: eyes
+
+- type: markingPoints
+  id: MobInsectoidMarkingLimits
+  onlyWhitelisted: true
+  points:
+    Hair:
+      points: 0
+      required: false
+    FacialHair:
+      points: 0
+      required: false
+    Tail:
+      points: 0
+      required: false
+    Snout:
+      points: 1
+      required: true
+      defaultMarkings: [ InsectMandibles ]
+    HeadTop:
+      points: 2
+      required: false
+      defaultMarkings: [ InsectAntennae ]
+    HeadSide:
+      points: 0
+      required: false
+    Chest:
+      points: 0
+      required: false
+    Legs:
+      points: 0
+      required: false
+    Arms:
+      points: 0
+      required: false
+
+- type: humanoidBaseSprite
+  id: MobInsectoidHead
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidHeadMale
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidHeadFemale
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobInsectoidTorso
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidTorsoMale
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidTorsoFemale
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLLeg
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLHand
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLArm
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLFoot
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRLeg
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRHand
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRArm
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRFoot
+  baseSprite:
+    sprite: Mobs/Species/Insectoid/parts.rsi
+    state: r_foot

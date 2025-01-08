@@ -164,3 +164,12 @@
   - chat-speech-verb-electricity-1
   - chat-speech-verb-electricity-2
   - chat-speech-verb-electricity-3
+
+- type: speechVerb
+  id: Insectoid # ToDo Revisit these if needed, currently placeholder
+  name: chat-speech-verb-name-insectoid
+  speechVerbStrings:
+  - chat-speech-verb-insect-1
+  - chat-speech-verb-insect-2
+  - chat-speech-verb-insect-3
+  - chat-speech-verb-reptilian-1

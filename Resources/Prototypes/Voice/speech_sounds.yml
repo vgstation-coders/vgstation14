@@ -159,3 +159,12 @@
     path: /Audio/Animals/chicken_cluck_happy.ogg
   exclaimSound:
     path: /Audio/Animals/chicken_cluck_happy.ogg
+
+- type: speechSounds
+  id: Insectoid # ToDo make unique bug sounds
+  saySound:
+    path: /Audio/Voice/Talk/arachnid.ogg
+  askSound:
+    path: /Audio/Voice/Talk/arachnid_ask.ogg
+  exclaimSound:
+    path: /Audio/Voice/Talk/arachnid_exclaim.ogg

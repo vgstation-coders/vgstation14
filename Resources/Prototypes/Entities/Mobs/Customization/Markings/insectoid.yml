@@ -1,0 +1,161 @@
+- type: marking
+  id: InsectHornet
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_hornet
+
+- type: marking
+  id: InsectShiny
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_shiny
+
+- type: marking
+  id: InsectSoldier
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_soldier
+
+- type: marking
+  id: InsectHiver
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_hiver
+
+- type: marking
+  id: InsectWedge
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_wedge
+
+- type: marking
+  id: InsectTriple
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_triple
+
+- type: marking
+  id: InsectNasute
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_nasute
+
+- type: marking
+  id: InsectWide
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_wide
+
+- type: marking
+  id: InsectRidge
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_ridge
+
+- type: marking
+  id: InsectSwept
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_swept
+
+- type: marking
+  id: InsectQuad
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_Quad
+
+- type: marking
+  id: InsectCrestSharp
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_crest_sharp
+
+- type: marking
+  id: InsectThick
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_thick
+
+- type: marking
+  id: InsectCrestShort
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_crest_short
+
+- type: marking
+  id: InsectCurly
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_curly
+
+- type: marking
+  id: InsectAntennaeLong
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_antennae_long
+
+- type: marking
+  id: InsectAntennae
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_antennae
+
+- type: marking
+  id: InsectMandibles
+  bodyPart: Snout
+  markingCategory: Snout
+  speciesRestriction: [Insectoid]
+  sprites:
+  - sprite: Mobs/Customization/insectoid_parts.rsi
+    state: insect_mandibles
