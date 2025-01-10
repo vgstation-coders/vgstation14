@@ -102,6 +102,9 @@
       "name": "wall_girder"
     },
     {
+      "name": "wall_girder_displaced"
+    },
+    {
       "name": "reinforced_wall_girder"
     }
   ]

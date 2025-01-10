@@ -1,6 +1,6 @@
 - type: entity
   id: Girder
-  parent: BaseStructureDynamic
+  parent: BaseStructure
   name: girder
   description: A large structural assembly made out of metal; It requires a layer of metal before it can be considered a wall.
   components:
@@ -56,6 +56,20 @@
     price: 30
 
 - type: entity
+  id: DisplacedGirder
+  parent: Girder
+  name: displaced girder
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/solid.rsi
+    state: wall_girder_displaced
+  - type: Construction
+    graph: Girder
+    node: girderDisplaced
+  - type: Physics
+    bodyType: Dynamic
+
+- type: entity
   id: ReinforcedGirder
   parent: Girder
   name: reinforced girder
@@ -67,6 +81,7 @@
     - type: Construction
       graph: Girder
       node: reinforcedGirder
+    - type: Anchorable
     - type: Destructible
       thresholds:
         - trigger:
